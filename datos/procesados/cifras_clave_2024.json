@@ -1,0 +1,142 @@
+{
+  "fuente": "INEI, ENAHO 2024 (módulo 34, Sumaria); cálculo propio con factor07 × mieperho",
+  "nacional": {
+    "tasa_pobreza": 27.579468163569082,
+    "ic95_pobreza": [
+      26.549847664612315,
+      28.60908866252585
+    ],
+    "tasa_pobreza_extrema": 5.504532807531087,
+    "tasa_pobreza_no_extrema": 22.07493535603799,
+    "poblacion_estimada": 34482699,
+    "pobres_estimados": 9510145,
+    "pobres_extremos_estimados": 1898111,
+    "hogares_muestra": 33691
+  },
+  "area": {
+    "Urbana": {
+      "tasa_pobreza": 24.806989363541586,
+      "tasa_pobreza_extrema": 3.1363122029013564,
+      "pobres_estimados": 6918052,
+      "pobres_extremos_estimados": 874639,
+      "participacion_en_pobres_pct": 72.74391715373424,
+      "participacion_en_pobres_extremos_pct": 46.07944424746498,
+      "participacion_en_poblacion_pct": 80.87392173101067
+    },
+    "Rural": {
+      "tasa_pobreza": 39.30279359674629,
+      "tasa_pobreza_extrema": 15.518467213577658,
+      "pobres_estimados": 2592093,
+      "pobres_extremos_estimados": 1023472,
+      "participacion_en_pobres_pct": 27.256082846265752,
+      "participacion_en_pobres_extremos_pct": 53.92055575253502,
+      "participacion_en_poblacion_pct": 19.12607826898933
+    }
+  },
+  "brecha_nacional": {
+    "tasa_urbana": 24.806989363541586,
+    "tasa_rural": 39.30279359674629,
+    "brecha_pp": 14.495804233204705,
+    "ee_brecha": 1.0506375840108357,
+    "ic95_inf_brecha": 12.436592391496491,
+    "ic95_sup_brecha": 16.55501607491292,
+    "brecha_significativa_95": true,
+    "razon_rural_urbana": 1.5843435501491747
+  },
+  "departamentos": {
+    "mayor_tasa": {
+      "departamento": "Cajamarca",
+      "tasa": 45.006896969959854,
+      "ic95": [
+        40.49628293421816,
+        49.51751100570155
+      ]
+    },
+    "menor_tasa": {
+      "departamento": "Ica",
+      "tasa": 6.014193630343336,
+      "ic95": [
+        4.181475643324999,
+        7.846911617361673
+      ]
+    },
+    "por_encima_del_nacional_con_ic95": [
+      "Ayacucho",
+      "Cajamarca",
+      "Callao",
+      "Huancavelica",
+      "Huánuco",
+      "Loreto",
+      "Pasco",
+      "Piura",
+      "Puno"
+    ],
+    "por_debajo_del_nacional_con_ic95": [
+      "Áncash",
+      "Arequipa",
+      "Cusco",
+      "Ica",
+      "Junín",
+      "Lambayeque",
+      "Madre de Dios",
+      "Moquegua",
+      "San Martín"
+    ],
+    "mas_pobres_en_numero": [
+      {
+        "departamento": "Lima",
+        "pobres": 3053352,
+        "tasa": 27.06894250548096,
+        "participacion_pct": 32.10626126100075
+      },
+      {
+        "departamento": "Cajamarca",
+        "pobres": 699671,
+        "tasa": 45.006896969959854,
+        "participacion_pct": 7.3571012849961805
+      },
+      {
+        "departamento": "Puno",
+        "pobres": 633772,
+        "tasa": 39.938078532416085,
+        "participacion_pct": 6.664167581041088
+      },
+      {
+        "departamento": "Piura",
+        "pobres": 633578,
+        "tasa": 31.86099754694799,
+        "participacion_pct": 6.6621276542050625
+      },
+      {
+        "departamento": "La Libertad",
+        "pobres": 628197,
+        "tasa": 30.190311612784406,
+        "participacion_pct": 6.605545972222295
+      }
+    ],
+    "promedio_simple_de_tasas": 26.498346221176377,
+    "referenciales_cv_mayor_15": [
+      "Ica",
+      "Madre de Dios",
+      "Moquegua"
+    ]
+  },
+  "brecha_por_departamento": {
+    "mayor": {
+      "departamento": "Loreto",
+      "brecha_pp": 28.414046451102692
+    },
+    "menor": {
+      "departamento": "Tumbes",
+      "brecha_pp": -8.151366941364351
+    },
+    "significativas_95": 16,
+    "con_ambas_areas": 24,
+    "rural_menor_que_urbana": [
+      "Ica",
+      "Pasco",
+      "San Martín",
+      "Tumbes"
+    ]
+  }
+}

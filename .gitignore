@@ -1,0 +1,6 @@
+# Microdatos del INEI (16 MB): se bajan con scripts/obtener_datos.py
+datos/originales/*.zip
+# Base de hogares intermedia: se regenera con scripts/procesar_datos.py
+datos/procesados/*.parquet
+.venv/
+__pycache__/

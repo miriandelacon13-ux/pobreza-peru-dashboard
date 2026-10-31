@@ -1,0 +1,145 @@
+"""Verifica las tablas de pobreza 2024 y escribe datos/procesados/verificacion.txt.
+
+1. Integridad: el zip coincide con el manifiesto; 33,691 hogares; cada conglomerado está en un solo departamento y área.
+2. Cifras externas: la pobreza nacional, extrema, urbana y rural frente a las publicadas por el INEI, y los 25
+   departamentos frente a la referencia del curso.
+3. Coherencia interna: los departamentos y las áreas suman el total nacional; pobreza total = extrema + no extrema;
+   la tasa nacional es el cociente de los totales, no el promedio de las tasas departamentales.
+4. Error de muestreo: compara el error estándar linealizado con un bootstrap de conglomerados.
+
+Termina con error si alguna comprobación falla.
+
+Uso: uv run scripts/verificar_datos.py
+"""
+
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+P = Path("datos/procesados")
+O = Path("datos/originales")
+# INEI, «Perú: Evolución de la pobreza monetaria 2015-2024», según la cobertura de prensa del 8-9 may. 2025
+# (el informe en gob.pe no permite la descarga automática). Coinciden con el README de la Sesión 16 del curso.
+OFICIAL = {"Nacional": 27.6, "extrema": 5.5, "Urbana": 24.8, "Rural": 39.3}
+POBRES_PUBLICADOS = 9_395_000  # «9 millones 395 mil personas», misma fuente de prensa
+TOLERANCIA_OFICIAL = 0.1  # puntos
+TOLERANCIA_REFERENCIA = 0.05  # la referencia del curso viene redondeada a un decimal
+REPLICAS, SEMILLA = 500, 20241031
+
+
+class Informe:
+    def __init__(self):
+        self.lineas, self.fallas = [], 0
+
+    def seccion(self, t):
+        self.lineas.append(f"\n## {t}")
+
+    def check(self, ok, t):
+        self.fallas += not ok
+        self.lineas.append(f"[{'OK' if ok else 'FALLA'}] {t}")
+
+    def info(self, t):
+        self.lineas.append(f"[INFO] {t}")
+
+
+def bootstrap_se(h, dominios, y="pobre"):
+    """Error estándar por bootstrap de conglomerados (con reemplazo, sin estratos) para la tasa de cada dominio."""
+    rng = np.random.default_rng(SEMILLA)
+    psu = h.conglome.astype("category")
+    codigos = psu.cat.codes.to_numpy()
+    n = len(psu.cat.categories)
+    resultados = {}
+    for nombre, dom in dominios.items():
+        w = np.where(dom, h.peso.to_numpy(), 0.0)
+        num = np.bincount(codigos, weights=w * h[y].to_numpy(), minlength=n)
+        den = np.bincount(codigos, weights=w, minlength=n)
+        conteos = rng.multinomial(n, np.full(n, 1 / n), size=REPLICAS)  # cuántas veces sale cada conglomerado
+        tasas = 100 * (conteos @ num) / (conteos @ den)
+        resultados[nombre] = float(np.std(tasas, ddof=1))
+    return resultados
+
+
+def main():
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+    inf = Informe()
+    h = pd.read_parquet(P / "hogares_2024.parquet")
+    nac = pd.read_csv(P / "pobreza_nacional_area_2024.csv").set_index("ambito")
+    dep = pd.read_csv(P / "pobreza_departamento_2024.csv", dtype={"ccdd": str})
+    da = pd.read_csv(P / "pobreza_departamento_area_2024.csv", dtype={"ccdd": str})
+
+    inf.seccion("1. Integridad de los datos")
+    manifiesto = json.loads((O / "manifiesto.json").read_text(encoding="utf-8"))
+    huella = hashlib.sha256((O / "966-Modulo34.zip").read_bytes()).hexdigest()
+    inf.check(huella == manifiesto["966-Modulo34.zip"]["sha256"], f"966-Modulo34.zip coincide con el manifiesto (sha256 {huella[:16]}…)")
+    inf.check(len(h) == 33_691 and not h.duplicated(["conglome", "vivienda", "hogar"]).any(), f"{len(h):,} hogares, sin duplicados")
+    g = h.groupby("conglome")
+    inf.check((g.departamento.nunique() == 1).all() and (g.area.nunique() == 1).all(),
+              f"cada uno de los {h.conglome.nunique():,} conglomerados pertenece a un solo departamento y una sola área")
+    inf.check(int(nac.loc["Nacional", "n_personas_muestra"]) == 109_842, "personas en la muestra (suma de mieperho): 109,842")
+
+    inf.seccion("2. Cifras externas")
+    for ambito in ["Nacional", "Urbana", "Rural"]:
+        t = nac.loc[ambito, "tasa_pobreza"]
+        inf.check(abs(t - OFICIAL[ambito]) < TOLERANCIA_OFICIAL and round(t, 1) == OFICIAL[ambito],
+                  f"pobreza {ambito.lower()}: {t:.2f} % (INEI, cifra difundida por la prensa: {OFICIAL[ambito]} %)")
+    t = nac.loc["Nacional", "tasa_pobreza_extrema"]
+    inf.check(round(t, 1) == OFICIAL["extrema"], f"pobreza extrema nacional: {t:.2f} % (INEI, según la prensa: {OFICIAL["extrema"]} %)")
+    ref = pd.read_csv(O / "referencia_curso_pobreza_departamento_2024.csv", dtype={"ccdd": str}).set_index("ccdd").pobreza_pct
+    dif = (dep.set_index("ccdd").tasa_pobreza - ref).abs()
+    inf.check(len(dif) == 25 and dif.max() <= TOLERANCIA_REFERENCIA,
+              f"25 departamentos frente a la referencia del curso: diferencia máxima {dif.max():.3f} puntos ({dif.idxmax()})")
+    pobres = int(nac.loc["Nacional", "pobres_estimados"])
+    inf.info(f"pobres estimados: {pobres:,}; el INEI difundió {POBRES_PUBLICADOS:,} (prensa) (diferencia {pobres - POBRES_PUBLICADOS:+,}, "
+             f"{100 * (pobres / POBRES_PUBLICADOS - 1):+.1f} %). Las tasas coinciden, pero la población total que expande la "
+             f"sumaria ({int(nac.loc['Nacional', 'poblacion_estimada']):,}) no es la que usa el INEI para las cifras absolutas: "
+             "usar los números absolutos como aproximación")
+
+    inf.seccion("3. Coherencia interna")
+    for col in ["poblacion_estimada", "pobres_estimados", "pobres_extremos_estimados"]:
+        total = nac.loc["Nacional", col]
+        inf.check(abs(dep[col].sum() - total) <= 25, f"suma de departamentos = nacional en {col} ({dep[col].sum():,} frente a {total:,})")
+        inf.check(abs(nac.loc["Urbana", col] + nac.loc["Rural", col] - total) <= 2, f"urbana + rural = nacional en {col}")
+        suma_da = da.groupby("ccdd")[col].sum()
+        inf.check((suma_da - dep.set_index("ccdd")[col]).abs().max() <= 2, f"departamento × área suma al departamento en {col}")
+    for nombre, t in [("nacional y áreas", nac), ("departamentos", dep), ("departamento × área", da)]:
+        inf.check(((t.tasa_pobreza - t.tasa_pobreza_extrema - t.tasa_pobreza_no_extrema).abs() < 0.002).all()
+                  and ((t.pobres_estimados - t.pobres_extremos_estimados - t.pobres_no_extremos_estimados).abs() <= 2).all(),
+                  f"pobreza total = extrema + no extrema ({nombre})")
+        inf.check(t.tasa_pobreza.between(0, 100).all() and (t.ic95_inf_pobreza <= t.tasa_pobreza).all()
+                  and (t.tasa_pobreza <= t.ic95_sup_pobreza).all(), f"tasas entre 0 y 100 y dentro de su IC 95 % ({nombre})")
+    desde_totales = 100 * dep.pobres_estimados.sum() / dep.poblacion_estimada.sum()
+    inf.check(abs(desde_totales - nac.loc["Nacional", "tasa_pobreza"]) < 0.001,
+              f"tasa nacional = pobres / población sumados por departamento ({desde_totales:.3f} %)")
+    inf.info(f"el promedio simple de las 25 tasas departamentales sería {dep.tasa_pobreza.mean():.2f} %, no "
+             f"{nac.loc['Nacional', 'tasa_pobreza']:.2f} %: promediar porcentajes ignora el tamaño de cada departamento")
+    inf.check(len(da) == 49 and not ((da.ccdd == "07") & (da.area == "Rural")).any(),
+              "departamento × área: 49 celdas (Callao no tiene hogares rurales en la muestra)")
+
+    inf.seccion("4. Error de muestreo: linealización frente a bootstrap de conglomerados")
+    dominios = {"Nacional": pd.Series(True, index=h.index), "Urbana": h.area == "Urbana", "Rural": h.area == "Rural",
+                "Lima": h.departamento == "15", "Cajamarca": h.departamento == "06", "Ica": h.departamento == "11"}
+    boot = bootstrap_se(h, dominios)
+    for nombre, se_b in boot.items():
+        se_l = nac.loc[nombre, "ee_pobreza"] if nombre in nac.index else dep.set_index("departamento").loc[nombre, "ee_pobreza"]
+        razon = se_b / se_l
+        inf.check(0.8 <= razon <= 1.25, f"{nombre}: EE linealizado {se_l:.3f}, bootstrap ({REPLICAS} réplicas) {se_b:.3f}, razón {razon:.2f}")
+    refer = dep[dep.precision_pobreza == "referencial"].departamento.tolist()
+    inf.info(f"departamentos con CV > 15 % (estimación referencial): {', '.join(refer) or 'ninguno'}")
+
+    resultado = "OK" if inf.fallas == 0 else f"FALLA ({inf.fallas} comprobaciones)"
+    texto = "\n".join(["# Verificación de las tablas de pobreza 2024", "Fuente: INEI, ENAHO 2024, módulo 34 (Sumaria). "
+                       "Alternativa B: miembros del hogar, factor07 × mieperho, una fila por hogar."] + inf.lineas
+                      + [f"\nRESULTADO: {resultado}", ""])
+    (P / "verificacion.txt").write_text(texto, encoding="utf-8")
+    print(texto)
+    if inf.fallas:
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()

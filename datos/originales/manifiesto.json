@@ -1,0 +1,73 @@
+{
+  "966-Modulo34.zip": {
+    "url": "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/STATA/966-Modulo34.zip",
+    "descripcion": "INEI, ENAHO 2024, módulo 34 (Sumaria): una fila por hogar",
+    "bytes": 15935617,
+    "sha256": "5ee98dad87810d42d7e252401d8366feac2fbce151c7af986d9644a40952567c",
+    "igual_al_verificado_en_este_proyecto": true,
+    "fecha_obtencion": "2026-10-31",
+    "contenido": [
+      {
+        "nombre": "966-Modulo34/ConstVarGasto-Metodologia actualizada.zip",
+        "bytes": 24486,
+        "fecha": "2025-05-07T19:18:00"
+      },
+      {
+        "nombre": "966-Modulo34/DefinicionValoresMonetariosBasedeDatos.pdf",
+        "bytes": 254671,
+        "fecha": "2025-05-05T19:34:58"
+      },
+      {
+        "nombre": "966-Modulo34/Diccionario2024.pdf",
+        "bytes": 3940690,
+        "fecha": "2025-05-16T14:36:04"
+      },
+      {
+        "nombre": "966-Modulo34/Estratificacion del Marco.pdf",
+        "bytes": 207192,
+        "fecha": "2025-05-05T16:51:42"
+      },
+      {
+        "nombre": "966-Modulo34/FichaTecnica.pdf",
+        "bytes": 487444,
+        "fecha": "2024-02-06T18:57:48"
+      },
+      {
+        "nombre": "966-Modulo34/sumaria-2024-12g.dta",
+        "bytes": 29991565,
+        "fecha": "2026-05-12T14:22:26"
+      },
+      {
+        "nombre": "966-Modulo34/Sumaria-2024-12g.pdf",
+        "bytes": 2727028,
+        "fecha": "2025-05-05T16:48:32"
+      },
+      {
+        "nombre": "966-Modulo34/sumaria-2024.dta",
+        "bytes": 21219121,
+        "fecha": "2025-05-08T09:27:46"
+      },
+      {
+        "nombre": "966-Modulo34/Sumaria-2024.pdf",
+        "bytes": 2142849,
+        "fecha": "2025-05-05T16:48:12"
+      }
+    ]
+  },
+  "peru_departamental_simple.geojson": {
+    "url": "https://raw.githubusercontent.com/d2cml-ai/Data-Science-Python/main/sessions/06-geoespacial/lab/Data/peru_departamental_simple.geojson",
+    "descripcion": "Límites de los 25 departamentos (FIRST_IDDP = código de departamento), repositorio del curso",
+    "bytes": 139681,
+    "sha256": "3d34d5450a1b1f059eebdf7386e5b5d071a5063bf3679fcbbbc5314493791290",
+    "igual_al_verificado_en_este_proyecto": true,
+    "fecha_obtencion": "2026-10-31"
+  },
+  "referencia_curso_pobreza_departamento_2024.csv": {
+    "url": "https://raw.githubusercontent.com/d2cml-ai/Data-Science-Python/main/sessions/16-skills-enaho/referencias/pobreza_departamento_2024.csv",
+    "descripcion": "Pobreza 2024 por departamento calculada por el profesor con la sumaria (solo para verificar)",
+    "bytes": 459,
+    "sha256": "59b66d00a14880fdbaf8c8925b37c39847c7ef16efc68f450ef5539c9dbaee8e",
+    "igual_al_verificado_en_este_proyecto": true,
+    "fecha_obtencion": "2026-10-31"
+  }
+}

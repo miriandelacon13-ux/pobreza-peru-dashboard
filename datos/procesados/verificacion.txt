@@ -1,0 +1,47 @@
+# Verificación de las tablas de pobreza 2024
+Fuente: INEI, ENAHO 2024, módulo 34 (Sumaria). Alternativa B: miembros del hogar, factor07 × mieperho, una fila por hogar.
+
+## 1. Integridad de los datos
+[OK] 966-Modulo34.zip coincide con el manifiesto (sha256 5ee98dad87810d42…)
+[OK] 33,691 hogares, sin duplicados
+[OK] cada uno de los 5,359 conglomerados pertenece a un solo departamento y una sola área
+[OK] personas en la muestra (suma de mieperho): 109,842
+
+## 2. Cifras externas
+[OK] pobreza nacional: 27.58 % (INEI, cifra difundida por la prensa: 27.6 %)
+[OK] pobreza urbana: 24.81 % (INEI, cifra difundida por la prensa: 24.8 %)
+[OK] pobreza rural: 39.30 % (INEI, cifra difundida por la prensa: 39.3 %)
+[OK] pobreza extrema nacional: 5.50 % (INEI, según la prensa: 5.5 %)
+[OK] 25 departamentos frente a la referencia del curso: diferencia máxima 0.049 puntos (01)
+[INFO] pobres estimados: 9,510,145; el INEI difundió 9,395,000 (prensa) (diferencia +115,145, +1.2 %). Las tasas coinciden, pero la población total que expande la sumaria (34,482,699) no es la que usa el INEI para las cifras absolutas: usar los números absolutos como aproximación
+
+## 3. Coherencia interna
+[OK] suma de departamentos = nacional en poblacion_estimada (34,482,702 frente a 34,482,699)
+[OK] urbana + rural = nacional en poblacion_estimada
+[OK] departamento × área suma al departamento en poblacion_estimada
+[OK] suma de departamentos = nacional en pobres_estimados (9,510,145 frente a 9,510,145)
+[OK] urbana + rural = nacional en pobres_estimados
+[OK] departamento × área suma al departamento en pobres_estimados
+[OK] suma de departamentos = nacional en pobres_extremos_estimados (1,898,109 frente a 1,898,111)
+[OK] urbana + rural = nacional en pobres_extremos_estimados
+[OK] departamento × área suma al departamento en pobres_extremos_estimados
+[OK] pobreza total = extrema + no extrema (nacional y áreas)
+[OK] tasas entre 0 y 100 y dentro de su IC 95 % (nacional y áreas)
+[OK] pobreza total = extrema + no extrema (departamentos)
+[OK] tasas entre 0 y 100 y dentro de su IC 95 % (departamentos)
+[OK] pobreza total = extrema + no extrema (departamento × área)
+[OK] tasas entre 0 y 100 y dentro de su IC 95 % (departamento × área)
+[OK] tasa nacional = pobres / población sumados por departamento (27.579 %)
+[INFO] el promedio simple de las 25 tasas departamentales sería 26.50 %, no 27.58 %: promediar porcentajes ignora el tamaño de cada departamento
+[OK] departamento × área: 49 celdas (Callao no tiene hogares rurales en la muestra)
+
+## 4. Error de muestreo: linealización frente a bootstrap de conglomerados
+[OK] Nacional: EE linealizado 0.525, bootstrap (500 réplicas) 0.524, razón 1.00
+[OK] Urbana: EE linealizado 0.617, bootstrap (500 réplicas) 0.627, razón 1.02
+[OK] Rural: EE linealizado 0.850, bootstrap (500 réplicas) 0.833, razón 0.98
+[OK] Lima: EE linealizado 1.204, bootstrap (500 réplicas) 1.207, razón 1.00
+[OK] Cajamarca: EE linealizado 2.301, bootstrap (500 réplicas) 2.201, razón 0.96
+[OK] Ica: EE linealizado 0.935, bootstrap (500 réplicas) 0.924, razón 0.99
+[INFO] departamentos con CV > 15 % (estimación referencial): Ica, Madre de Dios, Moquegua
+
+RESULTADO: OK

@@ -1,0 +1,10 @@
+[project]
+name = "pobreza-peru-dashboard"
+version = "0.1.0"
+description = "Pobreza monetaria en el Perú 2024 por departamento y área: datos, dashboard y reel (Tarea 3)"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy>=2.5.4",
+    "pandas>=3.1.0",
+    "pyarrow>=26.0.0",
+]

@@ -1,0 +1,2 @@
+# Datos originales: se guardan byte a byte, para que su SHA-256 coincida con el manifiesto
+datos/originales/** -text

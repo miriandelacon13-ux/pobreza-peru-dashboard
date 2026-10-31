@@ -1,0 +1,16 @@
+numpy==2.5.4
+    # via
+    #   pandas
+    #   pobreza-peru-dashboard
+pandas==3.1.0
+    # via pobreza-peru-dashboard
+pyarrow==26.0.0
+    # via pobreza-peru-dashboard
+python-dateutil==3.0.0
+    # via pandas
+six==1.17.0
+    # via python-dateutil
+tzdata==2026.6
+    # via
+    #   pandas
+    #   python-dateutil
