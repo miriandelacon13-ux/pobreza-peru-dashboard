@@ -3,9 +3,15 @@
 Tarea 3 del curso Python Intermedio: *Del dato a la historia: dashboard interactivo y reel con IA*
 ([enunciado](https://github.com/d2cml-ai/Data-Science-Python/issues/197)).
 
-- **Dashboard:** https://miriandelacon13-ux.github.io/pobreza-peru-dashboard/web/
-- **Reel:** [`reel/reel.mp4`](reel/reel.mp4), 65 s, vertical, con voz generada con IA
-- **Publicación de LinkedIn:** *pendiente (etapa 4)*
+## Enlaces
+
+| Producto | Enlace |
+|---|---|
+| Dashboard público | https://miriandelacon13-ux.github.io/pobreza-peru-dashboard/web/ |
+| Publicación de LinkedIn con el reel | https://lnkd.in/p/dvRREVQG |
+| Publicación de LinkedIn con capturas del dashboard | https://lnkd.in/p/dWkYH2R8 |
+| Reel (archivo) | [`reel/reel.mp4`](reel/reel.mp4): 65 s, vertical, con voz generada con IA |
+| Repositorio | https://github.com/miriandelacon13-ux/pobreza-peru-dashboard |
 
 ## Tema y pregunta de investigación
 
@@ -23,7 +29,10 @@ de Hogares (ENAHO) del INEI.
 
 - **Desagregación:** por departamento, por área y por departamento × área.
 - **Además de cada tasa:** la población estimada, el número aproximado de pobres y el margen de error.
-- **Productos:** un dashboard público e interactivo y un reel de divulgación (etapa 3).
+- **Productos:**
+  - Un dashboard público e interactivo.
+  - Un reel de divulgación con voz generada con IA.
+  - Dos publicaciones en LinkedIn: una con el reel y otra con capturas del dashboard.
 
 ## Estado del proyecto
 
@@ -32,7 +41,7 @@ de Hogares (ENAHO) del INEI.
 | **1. Obtención, procesamiento, análisis y verificación de datos** | ✅ Completa |
 | **2. Dashboard público e interactivo** | ✅ Publicado en GitHub Pages |
 | **3. Reel con IA** (guion, narración con voz propia, imágenes, música, subtítulos) | ✅ Terminado y aprobado por la autora ([`reel/`](reel/)) |
-| 4. Publicación en LinkedIn y README final | ⏳ Pendiente |
+| **4. Publicación en LinkedIn y README final** | ✅ Publicado: [reel](https://lnkd.in/p/dvRREVQG) y [capturas del dashboard](https://lnkd.in/p/dWkYH2R8) |
 
 ## Dashboard
 
@@ -213,7 +222,8 @@ datos/
   originales/   manifiesto.json, GeoJSON y referencia del curso (el zip del INEI no se sube: se descarga)
   procesados/   tablas CSV, cifras_clave_2024.json, verificacion.txt y su diccionario (README.md)
 scripts/        obtener, procesar, analizar, verificar y exportar los datos; probar el dashboard (navegador.py)
-docs/           metodologia.md, hallazgos.md, capturas/ (imágenes del dashboard)
+docs/           metodologia.md, hallazgos.md, capturas/ (imágenes del dashboard),
+                publicacion/ (textos de LinkedIn, miniatura del reel y comentario de entrega)
 web/            dashboard: index.html, assets/ (estilos.css, app.js), data/ (JSON y GeoJSON)
 index.html      redirige a web/ (raíz del sitio de GitHub Pages)
 reel/           guion, voz con IA, subtítulos, música y montaje del reel (ver reel/README.md)
@@ -240,3 +250,4 @@ metodológicas, como usar la alternativa B, y es responsable de revisar los resu
 - **Voz del reel:** la generó Qwen3-TTS (Alibaba, Apache 2.0) a partir de la voz de la autora. Whisper (OpenAI, MIT)
   transcribió la referencia y controló la pronunciación.
 - **Música:** es de Kevin MacLeod (CC BY 4.0).
+- **Textos de LinkedIn:** el asistente los propuso y la autora los revisó y publicó.
