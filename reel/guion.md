@@ -39,7 +39,8 @@ Reel vertical 9:16 (1080 × 1920) de unos 60 segundos, en 7 escenas. Resume los 
 > de cada cien.
 
 - **En pantalla:** «45.0 % vs 6.0 %» · *Cajamarca frente a Ica, 2024*
-- **Visual:** el mapa con Cajamarca resaltada y luego Ica; después, el ranking con sus intervalos.
+- **Visual:** el ranking con sus intervalos mientras se dice que las diferencias son enormes; el mapa con Cajamarca
+  resaltada al decir «Cajamarca», y con Ica al decir «Ica».
 - **Respaldo:** Cajamarca 45.01 %, Ica 6.01 %.
 
 ### 4. Hallazgo 2: Lima · 0:29–0:39
@@ -48,8 +49,8 @@ Reel vertical 9:16 (1080 × 1920) de unos 60 segundos, en 7 escenas. Resume los 
 > pobres del Perú.
 
 - **En pantalla:** «32.1 %» · *De los pobres viven en Lima (cálculo propio)*
-- **Visual:** el mapa en modo «Personas», donde Lima destaca; luego, el gráfico de tasa frente a número de pobres, con
-  Lima resaltada.
+- **Visual:** el gráfico de tasa frente a número de pobres, con Lima resaltada cerca de la línea del país; al decir
+  «reúne», el mapa en modo «Personas», donde Lima destaca.
 - **Respaldo:** Lima 27.07 % frente a 27.58 % del país. La participación de 32.1 % es una estimación propia.
 
 ### 5. Hallazgo 3: el campo y la ciudad · 0:39–0:49
@@ -58,7 +59,8 @@ Reel vertical 9:16 (1080 × 1920) de unos 60 segundos, en 7 escenas. Resume los 
 > cuatro.
 
 - **En pantalla:** «39.3 % vs 24.8 %» · *Pobreza rural frente a urbana, 2024*
-- **Visual:** el gráfico de brecha urbano-rural por departamento; se alternan los mapas urbano y rural.
+- **Visual:** el gráfico de brecha urbano-rural por departamento; el mapa rural al decir «cuatro de cada diez» y el
+  urbano al decir «ciudades».
 - **Respaldo:** rural 39.30 % y urbana 24.81 %; el INEI publicó 39.3 % y 24.8 %.
 
 ### 6. Hallazgo 3: la pobreza extrema · 0:49–0:56
@@ -66,7 +68,7 @@ Reel vertical 9:16 (1080 × 1920) de unos 60 segundos, en 7 escenas. Resume los 
 > Y la pobreza extrema golpea más al campo: allí es casi cinco veces la de las ciudades.
 
 - **En pantalla:** «15.5 % vs 3.1 %» · *Pobreza extrema rural frente a urbana*
-- **Visual:** la composición con la pobreza extrema resaltada y el mapa de pobreza extrema rural.
+- **Visual:** el mapa de pobreza extrema rural; al decir «cinco veces», la composición con la pobreza extrema resaltada.
 - **Respaldo:** 15.52 % frente a 3.14 %, es decir, 4.95 veces.
 
 ### 7. Invitación · 0:56–1:04
@@ -74,20 +76,21 @@ Reel vertical 9:16 (1080 × 1920) de unos 60 segundos, en 7 escenas. Resume los 
 > Busca tu departamento y compara el campo con la ciudad en mi tablero interactivo. El enlace está en la publicación.
 
 - **En pantalla:** *Explora el tablero: enlace en la publicación*
-- **Visual:** una grabación de pantalla del tablero público (elegir un departamento, cambiar de área) y luego la tarjeta
-  de créditos.
+- **Visual:** los filtros del tablero con Cusco elegido; al decir «compara», los KPI de Cusco rural. Cierra con la
+  tarjeta de créditos.
 
-Las capturas salen del tablero publicado con los filtros de cada URL:
+Las capturas salen del tablero publicado con los filtros de cada URL (`scripts/capturas_reel.py`). Cada cambio de
+imagen ocurre cuando la narración dice su palabra; `reel/reel.py` usa los tiempos por palabra de Whisper:
 
 | Escena | URL |
 |---|---|
 | 1 | `web/` |
 | 2 | `web/` (cabecera) |
-| 3 | `web/?dep=06`, `web/?dep=11` |
-| 4 | `web/?medida=personas`, `web/?dep=15` |
-| 5 | `web/`, `web/?area=urbana`, `web/?area=rural` |
-| 6 | `web/?tipo=extrema`, `web/?area=rural&tipo=extrema` |
-| 7 | grabación de pantalla del tablero público |
+| 3 | `web/` (ranking), `web/?dep=06`, `web/?dep=11` |
+| 4 | `web/?dep=15` (dispersión), `web/?medida=personas` |
+| 5 | `web/` (brecha), `web/?area=rural`, `web/?area=urbana` |
+| 6 | `web/?area=rural&tipo=extrema`, `web/?tipo=extrema` (composición) |
+| 7 | `web/?dep=08` (filtros), `web/?dep=08&area=rural` (KPI) |
 
 ## Tarjeta final de créditos
 

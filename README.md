@@ -4,6 +4,7 @@ Tarea 3 del curso Python Intermedio: *Del dato a la historia: dashboard interact
 ([enunciado](https://github.com/d2cml-ai/Data-Science-Python/issues/197)).
 
 - **Dashboard:** https://miriandelacon13-ux.github.io/pobreza-peru-dashboard/web/
+- **Reel:** [`reel/reel.mp4`](reel/reel.mp4), 65 s, vertical, con voz generada con IA
 - **Publicación de LinkedIn:** *pendiente (etapa 4)*
 
 ## Tema y pregunta de investigación
@@ -30,13 +31,15 @@ de Hogares (ENAHO) del INEI.
 |---|---|
 | **1. Obtención, procesamiento, análisis y verificación de datos** | ✅ Completa |
 | **2. Dashboard público e interactivo** | ✅ Publicado en GitHub Pages |
-| 3. Reel con IA (guion, narración con voz propia, imágenes, música, subtítulos) | ⏳ Pendiente |
+| **3. Reel con IA** (guion, narración con voz propia, imágenes, música, subtítulos) | ✅ Terminado y aprobado por la autora ([`reel/`](reel/)) |
 | 4. Publicación en LinkedIn y README final | ⏳ Pendiente |
 
 ## Dashboard
 
 [Abrir el dashboard](https://miriandelacon13-ux.github.io/pobreza-peru-dashboard/web/). Es una página estática en
 `web/`, hecha con HTML, CSS, JavaScript y Plotly, y publicada con GitHub Pages.
+
+![Vista general del dashboard: pregunta, filtros, cuatro KPI, mapa y ranking](docs/capturas/dashboard_vista_general.png)
 
 **Controles.** Un solo bloque de filtros arriba actualiza todos los indicadores y gráficos:
 
@@ -79,6 +82,32 @@ comprobaciones, todas OK.
 - Prueba el clic en el mapa, el botón Restablecer, la URL, el modo oscuro y la vista de celular.
 - Revisa la redacción de los textos.
 - Falla ante cualquier error de JavaScript o petición fallida.
+
+![Brecha urbano-rural por departamento y tasa frente a número de pobres](docs/capturas/dashboard_brecha_y_lima.png)
+
+## Reel
+
+[`reel/reel.mp4`](reel/reel.mp4) cuenta los tres hallazgos en 65 segundos. El guion, la grabación, la voz, los
+subtítulos, la música y el montaje están en [`reel/README.md`](reel/README.md).
+
+| Requisito | Cómo se cumple |
+|---|---|
+| 45 a 75 s y 5 a 7 escenas | 65.1 s y 7 escenas: gancho, la encuesta, los tres hallazgos (en cuatro escenas) e invitación al tablero |
+| Formato | Vertical 9:16, 1080 × 1920, H.264, 8 MB |
+| Narración con IA a partir de la voz propia | Qwen3-TTS (Apache 2.0) clonó la voz de la autora a partir de una grabación de 20.5 s, que no se sube a git |
+| Imágenes, gráficos y mapas | 14 capturas del tablero publicado. Cada una aparece cuando la narración dice su palabra |
+| Música | «Dreamer» de Kevin MacLeod, CC BY 4.0, unos 22 dB por debajo de la voz ([créditos y verificación de la licencia](reel/recursos/musica/CREDITOS.md)) |
+| Subtítulos | Sincronizados palabra por palabra e incrustados en el video; también en [`reel/subtitulos.srt`](reel/subtitulos.srt) |
+| Fuente, créditos y aviso de IA | «Voz generada con IA» y «Fuente: INEI, ENAHO 2024 · cálculos propios» durante todo el video, y tarjeta final de créditos |
+
+**Verificación:**
+
+- **Guion:** `scripts/verificar_guion.py` hace 35 comprobaciones, todas OK. Revisa cada cifra y aproximación contra
+  los CSV.
+- **Video:** `scripts/verificar_reel.py` hace 17 comprobaciones, todas OK, sobre el formato, la duración, la
+  sonoridad (−16 LUFS), la música bajo la voz, los subtítulos idénticos al guion y la pronunciación.
+- **Pronunciación:** Whisper transcribió el audio final sin conocer el guion, con un error de palabras de 0.006. La
+  autora escuchó y aprobó el reel.
 
 ## Fuentes de datos y metodología
 
@@ -163,7 +192,14 @@ uv run scripts/analizar_datos.py    # tablas, comparaciones y cifras_clave_2024.
 uv run scripts/verificar_datos.py   # 42 comprobaciones -> datos/procesados/verificacion.txt
 uv run scripts/exportar_web.py      # datos del dashboard -> web/data/
 uv run scripts/probar_dashboard.py  # prueba el dashboard en un navegador (necesita Edge o Chrome)
+uv run scripts/capturas_reel.py     # capturas del tablero para el reel
+uv run scripts/verificar_guion.py   # guion del reel frente a los datos
 ```
+
+El reel va en un entorno aparte, porque `qwen-tts` fija `transformers==4.57.3`. Los pasos están en
+[`reel/README.md`](reel/README.md). Con ese entorno:
+`reel/.venv/Scripts/python.exe reel/hacer_reel.py --voz reel/recursos/mi_voz.m4a`, y luego
+`uv run scripts/verificar_reel.py`. La grabación de referencia no está en el repositorio: hace falta una propia.
 
 - **Ver el dashboard en local:** `python -m http.server` en la raíz del repositorio y abrir
   http://localhost:8000/web/.
@@ -177,10 +213,10 @@ datos/
   originales/   manifiesto.json, GeoJSON y referencia del curso (el zip del INEI no se sube: se descarga)
   procesados/   tablas CSV, cifras_clave_2024.json, verificacion.txt y su diccionario (README.md)
 scripts/        obtener, procesar, analizar, verificar y exportar los datos; probar el dashboard (navegador.py)
-docs/           metodologia.md, hallazgos.md
+docs/           metodologia.md, hallazgos.md, capturas/ (imágenes del dashboard)
 web/            dashboard: index.html, assets/ (estilos.css, app.js), data/ (JSON y GeoJSON)
 index.html      redirige a web/ (raíz del sitio de GitHub Pages)
-reel/           se creará en la etapa 3
+reel/           guion, voz con IA, subtítulos, música y montaje del reel (ver reel/README.md)
 ```
 
 ## Recursos reutilizados
@@ -196,7 +232,11 @@ reel/           se creará en la etapa 3
 ## Uso de inteligencia artificial
 
 Este proyecto se desarrolla con Claude Code, de Anthropic, como asistente para escribir el código, verificar las
-cifras, construir el dashboard y redactar la documentación. La autora tomó las decisiones metodológicas, como usar la
-alternativa B, y es responsable de revisar los resultados. Las cifras salen de los scripts del repositorio, no del
-asistente; su verificación está en `datos/procesados/verificacion.txt`, y la del dashboard, en
-`scripts/probar_dashboard.py`.
+cifras, construir el dashboard, armar el reel y redactar la documentación. La autora tomó las decisiones
+metodológicas, como usar la alternativa B, y es responsable de revisar los resultados.
+
+- **Cifras:** salen de los scripts del repositorio, no del asistente. Su verificación está en
+  `datos/procesados/verificacion.txt`; la del dashboard, en `scripts/probar_dashboard.py`.
+- **Voz del reel:** la generó Qwen3-TTS (Alibaba, Apache 2.0) a partir de la voz de la autora. Whisper (OpenAI, MIT)
+  transcribió la referencia y controló la pronunciación.
+- **Música:** es de Kevin MacLeod (CC BY 4.0).

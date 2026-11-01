@@ -1,0 +1,55 @@
+{
+  "modelo_voz": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+  "referencia_transcrita": "Hola, mi nombre es Miriam de la Cruz. Te cuento lo que encontré en los datos de pobreza del Perú de 2024. Revisé miles de hogares de la costa, la sierra y la selva y comparé los 25 departamentos. Algunas cifras sorprenden, así que vamos con calma, una por una.",
+  "escenas": [
+    {
+      "escena": 1,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "En dos mil veinticuatro, más de una de cada cuatro personas en el Perú vivía en pobreza monetaria. ¿Pero es igual en todo el país?",
+      "segundos": 9.44
+    },
+    {
+      "escena": 2,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "Analicé la encuesta del INEI a más de treinta y tres mil hogares. Es pobre quien vive en un hogar que no cubre la canasta básica.",
+      "segundos": 8.72
+    },
+    {
+      "escena": 3,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "Las diferencias entre departamentos son enormes. En Cajamarca, casi la mitad de la población es pobre. En Ica, seis de cada cien.",
+      "segundos": 8.8
+    },
+    {
+      "escena": 4,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "La tasa no lo dice todo, Lima está cerca del promedio nacional, pero según mis cálculos reúne casi uno de cada tres pobres del Perú.",
+      "segundos": 9.28
+    },
+    {
+      "escena": 5,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "En el campo la pobreza es mayor, casi cuatro de cada diez personas son pobres, y en las ciudades, casi una de cada cuatro.",
+      "segundos": 8.32
+    },
+    {
+      "escena": 6,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "Y la pobreza extrema golpea más al campo, allí es casi cinco veces la de las ciudades.",
+      "segundos": 5.92
+    },
+    {
+      "escena": 7,
+      "wer": 0.0,
+      "intentos": 1,
+      "oido": "Busca tu departamento y compara el campo con la ciudad en mi tablero interactivo. El enlace está en la publicación.",
+      "segundos": 7.36
+    }
+  ]
+}

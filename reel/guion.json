@@ -1,5 +1,6 @@
 {
   "titulo": "¿Dónde está la pobreza?",
+  "autora": "Mirian de la Cruz Condori",
   "fuente_en_pantalla": "Fuente: INEI, ENAHO 2024 · cálculos propios",
   "aviso_en_pantalla": "Voz generada con IA",
   "duracion_objetivo_s": "60 a 70",
@@ -11,7 +12,10 @@
       "duracion_s": 10,
       "visual": "Mapa del tablero (tasa de pobreza total) que aparece con un acercamiento lento; la cifra 27.6 % encima.",
       "captura": "web/ (tarjeta del mapa y fila de KPI)",
-      "respaldo": "Tasa nacional 27.58 % (pobreza_nacional_area_2024.csv); el INEI publicó 27.6 %."
+      "respaldo": "Tasa nacional 27.58 % (pobreza_nacional_area_2024.csv); el INEI publicó 27.6 %.",
+      "imagenes": [
+        "mapa_total"
+      ]
     },
     {
       "frase": "Analicé la encuesta del INEI a más de treinta y tres mil hogares. Es pobre quien vive en un hogar que no cubre la canasta básica.",
@@ -20,62 +24,118 @@
       "duracion_s": 10,
       "visual": "Cabecera del tablero (pregunta, cobertura, fuente, muestra) con desplazamiento vertical lento.",
       "captura": "web/ (cabecera)",
-      "respaldo": "33,691 hogares en la Sumaria 2024 (n_hogares, fila Nacional)."
+      "respaldo": "33,691 hogares en la Sumaria 2024 (n_hogares, fila Nacional).",
+      "imagenes": [
+        "portada"
+      ]
     },
     {
       "frase": "Las diferencias entre departamentos son enormes: en Cajamarca, casi la mitad de la población es pobre; en Ica, seis de cada cien.",
       "cifra": "45.0 % vs 6.0 %",
       "etiqueta": "Cajamarca frente a Ica, 2024",
       "duracion_s": 9,
-      "visual": "Mapa de tasa total con Cajamarca resaltada y luego Ica; después, el ranking de departamentos con sus intervalos.",
+      "visual": "Ranking de departamentos con sus intervalos mientras se dice que las diferencias son enormes; el mapa con Cajamarca resaltada al decir «Cajamarca» y con Ica al decir «Ica».",
       "captura": "web/?dep=06 y web/?dep=11 (mapa y ranking)",
-      "respaldo": "Cajamarca 45.01 % e Ica 6.01 % (pobreza_departamento_2024.csv). Las dos difieren claramente de la tasa del país (prueba de diferencia documentada)."
+      "respaldo": "Cajamarca 45.01 % e Ica 6.01 % (pobreza_departamento_2024.csv). Las dos difieren claramente de la tasa del país (prueba de diferencia documentada).",
+      "imagenes": [
+        "ranking_total",
+        {
+          "captura": "mapa_cajamarca",
+          "desde": "Cajamarca,"
+        },
+        {
+          "captura": "mapa_ica",
+          "desde": "Ica,"
+        }
+      ]
     },
     {
       "frase": "La tasa no lo dice todo: Lima está cerca del promedio nacional, pero según mis cálculos reúne casi uno de cada tres pobres del Perú.",
       "cifra": "32.1 %",
       "etiqueta": "De los pobres viven en Lima (cálculo propio)",
       "duracion_s": 10,
-      "visual": "Mapa en modo «Personas», donde Lima destaca, y luego el gráfico de tasa frente a número de pobres con Lima resaltada.",
+      "visual": "Gráfico de tasa frente a número de pobres, con Lima resaltada cerca de la línea del país; al decir «reúne», el mapa en modo «Personas», donde Lima destaca.",
       "captura": "web/?medida=personas (mapa) y web/?dep=15 (dispersión)",
-      "respaldo": "Lima 27.07 % frente a 27.58 % del país; participación de Lima en los pobres: 32.1 % (participacion_en_pobres_pct, estimación propia)."
+      "respaldo": "Lima 27.07 % frente a 27.58 % del país; participación de Lima en los pobres: 32.1 % (participacion_en_pobres_pct, estimación propia).",
+      "imagenes": [
+        "dispersion_lima",
+        {
+          "captura": "mapa_personas",
+          "desde": "reúne"
+        }
+      ]
     },
     {
       "frase": "En el campo la pobreza es mayor: casi cuatro de cada diez personas son pobres, y en las ciudades, casi una de cada cuatro.",
       "cifra": "39.3 % vs 24.8 %",
       "etiqueta": "Pobreza rural frente a urbana, 2024",
       "duracion_s": 10,
-      "visual": "Gráfico de brecha urbano-rural por departamento (puntos azules y naranjas) con desplazamiento lento; alternar los mapas urbano y rural.",
+      "visual": "Gráfico de brecha urbano-rural por departamento; el mapa rural al decir «cuatro de cada diez» y el urbano al decir «ciudades».",
       "captura": "web/ (tarjeta de brecha), web/?area=urbana y web/?area=rural (mapa)",
-      "respaldo": "Rural 39.30 % y urbana 24.81 % (pobreza_nacional_area_2024.csv); el INEI publicó 39.3 % y 24.8 %."
+      "respaldo": "Rural 39.30 % y urbana 24.81 % (pobreza_nacional_area_2024.csv); el INEI publicó 39.3 % y 24.8 %.",
+      "imagenes": [
+        "brecha_total",
+        {
+          "captura": "mapa_rural",
+          "desde": "cuatro"
+        },
+        {
+          "captura": "mapa_urbana",
+          "desde": "ciudades,"
+        }
+      ]
     },
     {
       "frase": "Y la pobreza extrema golpea más al campo: allí es casi cinco veces la de las ciudades.",
       "cifra": "15.5 % vs 3.1 %",
       "etiqueta": "Pobreza extrema rural frente a urbana",
       "duracion_s": 7,
-      "visual": "Gráfico de composición con la pobreza extrema resaltada y el mapa de pobreza extrema rural.",
+      "visual": "Mapa de pobreza extrema rural; al decir «cinco veces», la composición con la pobreza extrema resaltada (rural frente a urbana).",
       "captura": "web/?tipo=extrema (composición) y web/?area=rural&tipo=extrema (mapa)",
-      "respaldo": "Extrema rural 15.52 % y urbana 3.14 %: razón 4.95 (brecha_urbano_rural_2024.csv)."
+      "respaldo": "Extrema rural 15.52 % y urbana 3.14 %: razón 4.95 (brecha_urbano_rural_2024.csv).",
+      "imagenes": [
+        "mapa_rural_extrema",
+        {
+          "captura": "composicion_extrema",
+          "desde": "cinco"
+        }
+      ]
     },
     {
       "frase": "Busca tu departamento y compara el campo con la ciudad en mi tablero interactivo. El enlace está en la publicación.",
       "cifra": "",
       "etiqueta": "Explora el tablero: enlace en la publicación",
       "duracion_s": 8,
-      "visual": "Grabación de pantalla del tablero público: elegir un departamento y cambiar de área. Cierra con la tarjeta de créditos.",
+      "visual": "Los filtros del tablero con Cusco elegido; al decir «compara», los KPI de Cusco rural. Cierra con la tarjeta de créditos.",
       "captura": "https://miriandelacon13-ux.github.io/pobreza-peru-dashboard/web/ (grabación de pantalla)",
-      "respaldo": "—"
+      "respaldo": "—",
+      "imagenes": [
+        "filtros_kpis_cusco",
+        {
+          "captura": "kpis_cusco_rural",
+          "desde": "compara"
+        }
+      ]
     }
   ],
   "creditos": [
     "Datos: INEI, Encuesta Nacional de Hogares (ENAHO) 2024, módulo 34 (Sumaria). Cálculos propios.",
-    "Análisis y tablero: Mirian de la Cruz Condori · github.com/miriandelacon13-ux/pobreza-peru-dashboard",
+    "Guion, análisis, tablero y montaje: Mirian de la Cruz Condori · github.com/miriandelacon13-ux/pobreza-peru-dashboard",
+    "Voz generada con IA (Qwen3-TTS) a partir de la voz de Mirian de la Cruz Condori",
+    "Música: «Dreamer» Kevin MacLeod (incompetech.com). Licensed under Creative Commons: By Attribution 4.0 · creativecommons.org/licenses/by/4.0/",
     "Mapa: límites departamentales del curso Data Science Python (d2cml-ai)",
-    "Voz generada con IA ([herramienta: Qwen3-TTS o VoxCPM2]) a partir de mi propia voz",
-    "Música: [título] de [autor], [licencia y enlace]",
-    "Imágenes: capturas de mi tablero"
+    "Imágenes: capturas del tablero propio"
   ],
-  "hashtags": ["#Pobreza", "#Perú", "#ENAHO", "#DatosAbiertos", "#CienciaDeDatos"],
-  "posts": {"linkedin": "", "x": "", "facebook": ""}
+  "hashtags": [
+    "#Pobreza",
+    "#Perú",
+    "#ENAHO",
+    "#DatosAbiertos",
+    "#CienciaDeDatos"
+  ],
+  "posts": {
+    "linkedin": "",
+    "x": "",
+    "facebook": ""
+  }
 }
