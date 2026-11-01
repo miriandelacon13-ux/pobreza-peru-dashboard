@@ -202,7 +202,7 @@ El reel va en un entorno aparte, porque `qwen-tts` fija `transformers==4.57.3`. 
 `uv run scripts/verificar_reel.py`. La grabación de referencia no está en el repositorio: hace falta una propia.
 
 - **Ver el dashboard en local:** `python -m http.server` en la raíz del repositorio y abrir
-  http://localhost:8000/web/.
+  `http://localhost:8000/web/`.
 - **Si el portal del INEI rechaza la descarga automática:** baja `966-Modulo34.zip` desde el navegador a
   `datos/originales/` y vuelve a correr `obtener_datos.py`.
 

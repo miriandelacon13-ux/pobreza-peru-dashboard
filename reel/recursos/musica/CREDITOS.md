@@ -24,7 +24,7 @@
   - El crédito debe verse («Do I have to put the credit where people can see it? Yes»): puede ir en el video o en la
     descripción.
   - Hay que dejar claro qué partes son del autor y cuáles propias.
-- **Wikimedia Commons** (https://commons.wikimedia.org/wiki/File:Dreamer_(ISRC_USUAN1600043).mp3):
+- **[Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Dreamer_%28ISRC_USUAN1600043%29.mp3):**
   - Registra la misma pista con licencia CC BY 3.0 y «Attribution required».
   - Su archivo tiene el mismo SHA-1 que el de incompetech, así que es idéntico byte a byte.
   - CC BY 3.0 y 4.0 permiten copiar, adaptar y publicar, incluso con fines comerciales, si se atribuye.
