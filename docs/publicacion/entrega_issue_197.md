@@ -8,6 +8,4 @@
 
 **Dashboard público:** https://miriandelacon13-ux.github.io/pobreza-peru-dashboard/web/
 
-**Reel:** https://github.com/miriandelacon13-ux/pobreza-peru-dashboard/blob/main/reel/reel.mp4
-
-**Publicación de LinkedIn:** https://lnkd.in/p/dvRREVQG (capturas del dashboard: https://lnkd.in/p/dWkYH2R8)
+**Publicación de LinkedIn:** https://lnkd.in/p/dvRREVQG (reel) · https://lnkd.in/p/dWkYH2R8 (capturas del dashboard)
