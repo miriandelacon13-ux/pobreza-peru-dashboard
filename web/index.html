@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pobreza monetaria en el Perú, 2024</title>
+  <meta name="description" content="Dashboard interactivo de la pobreza monetaria 2024 por departamento y área urbana o rural, con datos de la ENAHO del INEI.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='2' y='8' width='3' height='6' rx='1' fill='%232a78d6'/%3E%3Crect x='6.5' y='4' width='3' height='10' rx='1' fill='%232a78d6'/%3E%3Crect x='11' y='2' width='3' height='12' rx='1' fill='%23184f95'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="assets/estilos.css">
+  <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist-min@2.35.2/plotly.min.js" defer></script>
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+<header class="portada">
+  <div class="contenedor">
+    <p class="antetitulo">Tarea 3 · Python Intermedio · Del dato a la historia</p>
+    <h1>Pobreza monetaria en el Perú, 2024</h1>
+    <p class="pregunta">¿Cómo se distribuye la pobreza monetaria entre los departamentos del Perú y qué brecha existe entre las áreas urbana y rural en 2024?</p>
+    <p class="contexto">Una persona está en pobreza monetaria cuando el gasto por persona de su hogar no alcanza para cubrir una canasta básica de alimentos y otros bienes y servicios; está en pobreza extrema cuando no alcanza ni para la canasta de alimentos. Este tablero estima cuántas personas viven en esa situación en cada departamento y área, con su margen de error.</p>
+    <ul class="ficha">
+      <li><span>Cobertura</span>25 departamentos (Lima y Callao por separado), área urbana y rural</li>
+      <li><span>Periodo</span>Año 2024</li>
+      <li><span>Fuente</span>INEI, Encuesta Nacional de Hogares (ENAHO) 2024, módulo 34 (Sumaria)</li>
+      <li><span>Muestra</span>33,691 hogares en 5,359 conglomerados</li>
+    </ul>
+  </div>
+</header>
+
+<nav class="filtros" aria-label="Filtros del tablero">
+  <div class="contenedor filtros-fila">
+    <label class="control">
+      <span class="control-etiqueta">Departamento</span>
+      <select id="f-dep"><option value="00">Todo el Perú</option></select>
+    </label>
+    <fieldset class="control segmentado" id="f-area">
+      <legend class="control-etiqueta">Área</legend>
+      <label><input type="radio" name="area" value="total" checked><span>Urbana y rural</span></label>
+      <label><input type="radio" name="area" value="urbana"><span>Urbana</span></label>
+      <label><input type="radio" name="area" value="rural"><span>Rural</span></label>
+    </fieldset>
+    <fieldset class="control segmentado" id="f-tipo">
+      <legend class="control-etiqueta">Tipo de pobreza</legend>
+      <label><input type="radio" name="tipo" value="total" checked><span>Total</span></label>
+      <label><input type="radio" name="tipo" value="extrema"><span>Extrema</span></label>
+      <label><input type="radio" name="tipo" value="no_extrema"><span>No extrema</span></label>
+    </fieldset>
+    <fieldset class="control segmentado" id="f-medida">
+      <legend class="control-etiqueta">El mapa muestra</legend>
+      <label><input type="radio" name="medida" value="tasa" checked><span>Tasa (%)</span></label>
+      <label><input type="radio" name="medida" value="personas"><span>Personas</span></label>
+    </fieldset>
+    <button type="button" id="f-reiniciar" class="boton-texto">Restablecer</button>
+  </div>
+  <div class="contenedor"><p class="seleccion" id="resumen-seleccion" aria-live="polite"></p></div>
+</nav>
+
+<main class="contenedor">
+  <section aria-labelledby="t-kpi" class="bloque">
+    <h2 id="t-kpi" class="visualmente-oculto">Indicadores principales</h2>
+    <div class="kpis">
+      <article class="kpi" id="kpi-tasa"><p class="kpi-etiqueta"></p><p class="kpi-valor"></p><p class="kpi-detalle"></p></article>
+      <article class="kpi" id="kpi-personas"><p class="kpi-etiqueta"></p><p class="kpi-valor"></p><p class="kpi-detalle"></p></article>
+      <article class="kpi" id="kpi-brecha"><p class="kpi-etiqueta"></p><p class="kpi-valor"></p><p class="kpi-detalle"></p></article>
+      <article class="kpi" id="kpi-comparacion"><p class="kpi-etiqueta"></p><p class="kpi-valor"></p><p class="kpi-detalle"></p></article>
+    </div>
+  </section>
+
+  <section class="bloque rejilla" aria-label="Visualizaciones">
+    <article class="tarjeta">
+      <h2 id="t-mapa"></h2>
+      <p class="subtitulo" id="s-mapa"></p>
+      <div id="g-mapa" class="grafico grafico-mapa" role="img" aria-labelledby="t-mapa"></div>
+      <p class="nota" id="n-mapa"></p>
+    </article>
+    <article class="tarjeta">
+      <h2 id="t-ranking"></h2>
+      <p class="subtitulo" id="s-ranking"></p>
+      <div id="g-ranking" class="grafico" role="img" aria-labelledby="t-ranking"></div>
+      <p class="nota" id="n-ranking"></p>
+    </article>
+    <article class="tarjeta">
+      <h2 id="t-brecha"></h2>
+      <p class="subtitulo" id="s-brecha"></p>
+      <div id="g-brecha" class="grafico" role="img" aria-labelledby="t-brecha"></div>
+      <p class="nota" id="n-brecha"></p>
+    </article>
+    <article class="tarjeta">
+      <h2 id="t-dispersion"></h2>
+      <p class="subtitulo" id="s-dispersion"></p>
+      <div id="g-dispersion" class="grafico" role="img" aria-labelledby="t-dispersion"></div>
+      <p class="nota" id="n-dispersion"></p>
+    </article>
+    <article class="tarjeta ancha">
+      <h2 id="t-composicion"></h2>
+      <p class="subtitulo" id="s-composicion"></p>
+      <div id="g-composicion" class="grafico grafico-bajo" role="img" aria-labelledby="t-composicion"></div>
+      <p class="nota" id="n-composicion"></p>
+    </article>
+    <details class="tarjeta ancha tabla-datos">
+      <summary>Ver los datos en una tabla</summary>
+      <p class="subtitulo" id="s-tabla"></p>
+      <div class="tabla-desplazable"><table id="tabla"><thead></thead><tbody></tbody></table></div>
+    </details>
+  </section>
+
+  <section class="bloque texto" id="hallazgos" aria-labelledby="t-hallazgos">
+    <h2 id="t-hallazgos">Tres hallazgos</h2>
+    <div class="hallazgos">
+      <article>
+        <p class="numero">1</p>
+        <h3>La pobreza va de 6 % a 45 % según el departamento</h3>
+        <p>Cajamarca tiene la tasa más alta (45.0 %, IC 95 % 40.5–49.5) e Ica la más baja (6.0 %). Nueve departamentos tienen una tasa claramente mayor que la del país (27.6 %), nueve claramente menor y siete no se distinguen. Entre los cinco más pobres —Cajamarca, Loreto, Puno, Pasco y Huánuco— no hay un orden exacto: la diferencia de Cajamarca con cada uno de los otros cuatro no es estadísticamente clara.</p>
+      </article>
+      <article>
+        <p class="numero">2</p>
+        <h3>La tasa y el número de pobres señalan lugares distintos</h3>
+        <p>Lima tiene una tasa de 27.1 %, 0.5 puntos menos que el país, una diferencia que no es estadísticamente clara. Pero concentra el 32.1 % de las personas pobres del país, unos 3.05 millones según la estimación propia: más que Cajamarca, Puno, Piura y La Libertad juntos. Y aunque la tasa urbana es menor, el 72.7 % de los pobres vive en ciudades, porque allí vive el 80.9 % de la población.</p>
+      </article>
+      <article>
+        <p class="numero">3</p>
+        <h3>En el campo, la pobreza es 14.5 puntos mayor</h3>
+        <p>La pobreza rural es 39.3 % y la urbana 24.8 % (brecha de 14.5 puntos, IC 95 % 12.4–16.6). La pobreza extrema rural es casi cinco veces la urbana (15.5 % frente a 3.1 %): el área rural tiene el 19.1 % de la población pero el 53.9 % de los pobres extremos. La brecha es clara en 15 de los 24 departamentos con ambas áreas y llega a 28.4 puntos en Loreto.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="bloque texto columnas" aria-label="Metodología, fuentes y limitaciones">
+    <article id="metodologia">
+      <h2>Metodología</h2>
+      <ul>
+        <li><strong>Quiénes cuentan.</strong> Los miembros del hogar, como en la sumaria del INEI: personas con p204 = 1, sin trabajadores del hogar ni pensionistas (variable <code>mieperho</code>).</li>
+        <li><strong>Ponderación.</strong> Una fila por hogar; cada hogar representa a <code>factor07 × mieperho</code> personas.</li>
+        <li><strong>Tasas.</strong> Personas en pobreza ÷ población del grupo × 100, calculadas desde los hogares de cada grupo. Ningún porcentaje se obtiene promediando otros porcentajes: promediar las 25 tasas departamentales daría 26.5 % en vez de 27.6 %.</li>
+        <li><strong>Margen de error.</strong> Intervalos de confianza al 95 % por linealización de Taylor, con el conglomerado como unidad de muestreo (como el do-file oficial del INEI). Una estimación con coeficiente de variación mayor a 15 % se marca como <em>referencial</em> (*).</li>
+        <li><strong>Diferencias «claras».</strong> Una diferencia (un departamento frente al país, o rural frente a urbano) es clara cuando el intervalo de confianza de la diferencia —que incluye la covarianza entre ambas tasas— no contiene el cero. No basta con que dos intervalos no se superpongan.</li>
+        <li><strong>Verificación.</strong> 42 comprobaciones: las tasas nacional, extrema, urbana y rural coinciden con las del INEI al decimal publicado, y los 25 departamentos con la referencia del curso.</li>
+      </ul>
+    </article>
+    <article id="fuentes">
+      <h2>Fuentes</h2>
+      <ul>
+        <li>INEI, <a href="https://proyectos.inei.gob.pe/iinei/srienaho/descarga/STATA/966-Modulo34.zip">ENAHO 2024, módulo 34 «Sumaria»</a> (código 966). Microdatos descargados el 31 de octubre de 2026.</li>
+        <li>INEI, <a href="https://cdn.www.gob.pe/uploads/document/file/6726276/5836665-una-mirada-al-peru-en-cifras.pdf"><em>Una mirada al Perú en cifras</em> Nº 7, julio 2024</a>: población proyectada al 2024 (34,038,457).</li>
+        <li>Cifras oficiales de pobreza 2024 del INEI (27.6 %, 5.5 %, 24.8 %, 39.3 %), tomadas de la cobertura de prensa de su informe <em>Evolución de la pobreza monetaria 2015-2024</em>.</li>
+        <li>Límites departamentales: <a href="https://github.com/d2cml-ai/Data-Science-Python/blob/main/sessions/06-geoespacial/lab/Data/peru_departamental_simple.geojson">GeoJSON del curso</a>, unido por código de departamento.</li>
+        <li>Código, tablas y verificación: <a href="https://github.com/miriandelacon13-ux/pobreza-peru-dashboard">repositorio del proyecto</a>.</li>
+      </ul>
+    </article>
+    <article id="limitaciones">
+      <h2>Limitaciones</h2>
+      <ul>
+        <li><strong>Es una encuesta.</strong> Las cifras departamentales tienen márgenes amplios; Ica, Madre de Dios y Moquegua, y varias combinaciones de departamento y área, son estimaciones referenciales.</li>
+        <li><strong>Números absolutos: estimación propia.</strong> Expanden la muestra a 34.48 millones de personas y dan 9.51 millones de pobres. El INEI difundió 9.395 millones, que equivalen a su tasa (27.6 %) por la población proyectada (34.04 millones). Las tasas coinciden; la diferencia (+1.2 %) está en la población total.</li>
+        <li><strong>Callao no tiene hogares rurales</strong> en la muestra: esas cifras aparecen como «sin dato», nunca como cero.</li>
+        <li><strong>«Lima» es el departamento completo.</strong> No es «Lima Metropolitana», que en la ENAHO incluye al Callao.</li>
+        <li><strong>Solo pobreza monetaria y solo 2024.</strong> No mide otras carencias ni muestra tendencias.</li>
+      </ul>
+    </article>
+  </section>
+</main>
+
+<footer class="pie">
+  <div class="contenedor">
+    <p>Elaborado con Python a partir de los microdatos del INEI. Asistente de IA: Claude Code (Anthropic), usado para escribir el código, verificar cifras y redactar textos; las decisiones metodológicas y la revisión son de la autora.</p>
+    <p><a href="https://github.com/miriandelacon13-ux/pobreza-peru-dashboard">Código y datos en GitHub</a></p>
+  </div>
+</footer>
+</body>
+</html>

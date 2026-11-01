@@ -13,7 +13,8 @@ Fuente: INEI, ENAHO 2024, módulo 34 (Sumaria). Alternativa B: miembros del hoga
 [OK] pobreza rural: 39.30 % (INEI, cifra difundida por la prensa: 39.3 %)
 [OK] pobreza extrema nacional: 5.50 % (INEI, según la prensa: 5.5 %)
 [OK] 25 departamentos frente a la referencia del curso: diferencia máxima 0.049 puntos (01)
-[INFO] pobres estimados: 9,510,145; el INEI difundió 9,395,000 (prensa) (diferencia +115,145, +1.2 %). Las tasas coinciden, pero la población total que expande la sumaria (34,482,699) no es la que usa el INEI para las cifras absolutas: usar los números absolutos como aproximación
+[OK] cifras absolutas del INEI = tasa publicada × población proyectada 2024 (34,038,457): 27.6 % → 9,395,000 y 5.5 % → 1,872,000, iguales a las difundidas
+[INFO] estimación propia: 9,510,145 pobres sobre 34,482,699 personas que expande la sumaria (factor07 × mieperho); +115,145 (+1.2 %) frente a la cifra del INEI, porque la población de la expansión es +444,242 mayor que la proyectada
 
 ## 3. Coherencia interna
 [OK] suma de departamentos = nacional en poblacion_estimada (34,482,702 frente a 34,482,699)
@@ -34,14 +35,24 @@ Fuente: INEI, ENAHO 2024, módulo 34 (Sumaria). Alternativa B: miembros del hoga
 [OK] tasa nacional = pobres / población sumados por departamento (27.579 %)
 [INFO] el promedio simple de las 25 tasas departamentales sería 26.50 %, no 27.58 %: promediar porcentajes ignora el tamaño de cada departamento
 [OK] departamento × área: 49 celdas (Callao no tiene hogares rurales en la muestra)
+[OK] pobreza: diferencia departamento − país = resta de tasas y clasificación coherente con su IC 95 %
+[OK] pobreza: brecha = tasa rural − tasa urbana en el país y en los 24 departamentos con ambas áreas
+[OK] pobreza_extrema: diferencia departamento − país = resta de tasas y clasificación coherente con su IC 95 %
+[OK] pobreza_extrema: brecha = tasa rural − tasa urbana en el país y en los 24 departamentos con ambas áreas
+[OK] pobreza_no_extrema: diferencia departamento − país = resta de tasas y clasificación coherente con su IC 95 %
+[OK] pobreza_no_extrema: brecha = tasa rural − tasa urbana en el país y en los 24 departamentos con ambas áreas
+[INFO] Lima: 27.07 % frente a 27.58 % nacional; diferencia -0.51 puntos (IC 95 % -2.24 a +1.22): no distinguible
 
-## 4. Error de muestreo: linealización frente a bootstrap de conglomerados
-[OK] Nacional: EE linealizado 0.525, bootstrap (500 réplicas) 0.524, razón 1.00
-[OK] Urbana: EE linealizado 0.617, bootstrap (500 réplicas) 0.627, razón 1.02
-[OK] Rural: EE linealizado 0.850, bootstrap (500 réplicas) 0.833, razón 0.98
-[OK] Lima: EE linealizado 1.204, bootstrap (500 réplicas) 1.207, razón 1.00
-[OK] Cajamarca: EE linealizado 2.301, bootstrap (500 réplicas) 2.201, razón 0.96
-[OK] Ica: EE linealizado 0.935, bootstrap (500 réplicas) 0.924, razón 0.99
-[INFO] departamentos con CV > 15 % (estimación referencial): Ica, Madre de Dios, Moquegua
+## 4. Error de muestreo: linealización frente a bootstrap de conglomerados (500 réplicas)
+[OK] tasa Nacional: EE linealizado 0.525, bootstrap 0.524, razón 1.00
+[OK] tasa Urbana: EE linealizado 0.617, bootstrap 0.614, razón 1.00
+[OK] tasa Rural: EE linealizado 0.850, bootstrap 0.866, razón 1.02
+[OK] tasa Lima: EE linealizado 1.204, bootstrap 1.248, razón 1.04
+[OK] tasa Cajamarca: EE linealizado 2.301, bootstrap 2.183, razón 0.95
+[OK] tasa Ica: EE linealizado 0.935, bootstrap 0.961, razón 1.03
+[OK] diferencia Lima − país: EE linealizado 0.883, bootstrap 0.919, razón 1.04
+[OK] diferencia Cajamarca − país: EE linealizado 2.258, bootstrap 2.148, razón 0.95
+[OK] brecha rural − urbana del país: EE linealizado 1.051, bootstrap 1.064, razón 1.01
+[INFO] departamentos con CV > 15 % en la pobreza total (estimación referencial): Ica, Madre de Dios, Moquegua
 
 RESULTADO: OK

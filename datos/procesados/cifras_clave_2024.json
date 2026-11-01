@@ -13,6 +13,13 @@
     "pobres_extremos_estimados": 1898111,
     "hogares_muestra": 33691
   },
+  "cifras_absolutas_inei": {
+    "nota": "El INEI difundió 9 395 000 pobres y 1 872 000 pobres extremos (prensa, mayo 2025). Equivalen a la tasa publicada (27.6 % y 5.5 %) × la población proyectada al 2024. Las cifras absolutas de este proyecto son estimaciones propias: expanden la muestra con factor07 × mieperho.",
+    "poblacion_proyectada_2024": 34038457,
+    "fuente_poblacion": "INEI, Una mirada al Perú en cifras, Nº 7, julio 2024",
+    "pobres_difundidos": 9395000,
+    "pobres_extremos_difundidos": 1872000
+  },
   "area": {
     "Urbana": {
       "tasa_pobreza": 24.806989363541586,
@@ -34,14 +41,30 @@
     }
   },
   "brecha_nacional": {
-    "tasa_urbana": 24.806989363541586,
-    "tasa_rural": 39.30279359674629,
-    "brecha_pp": 14.495804233204705,
-    "ee_brecha": 1.0506375840108357,
-    "ic95_inf_brecha": 12.436592391496491,
-    "ic95_sup_brecha": 16.55501607491292,
-    "brecha_significativa_95": true,
-    "razon_rural_urbana": 1.5843435501491747
+    "pobreza": {
+      "brecha_pp": 14.495804233204705,
+      "ic95": [
+        12.436592391496491,
+        16.55501607491292
+      ],
+      "razon_rural_urbana": 1.5843435501491747
+    },
+    "pobreza_extrema": {
+      "brecha_pp": 12.382155010676302,
+      "ic95": [
+        11.002418557352035,
+        13.761891464000568
+      ],
+      "razon_rural_urbana": 4.947998225183626
+    },
+    "pobreza_no_extrema": {
+      "brecha_pp": 2.1136492225283945,
+      "ic95": [
+        0.5319033560131718,
+        3.6953950890436174
+      ],
+      "razon_rural_urbana": 1.097534987340744
+    }
   },
   "departamentos": {
     "mayor_tasa": {
@@ -50,6 +73,44 @@
       "ic95": [
         40.49628293421816,
         49.51751100570155
+      ],
+      "frente_a_los_cuatro_siguientes": [
+        {
+          "frente_a": "Loreto",
+          "dif_pp": 2.0343187839194954,
+          "ic95": [
+            -4.38467855036701,
+            8.453316118206
+          ],
+          "comparacion": "no distinguible"
+        },
+        {
+          "frente_a": "Puno",
+          "dif_pp": 5.068818437543769,
+          "ic95": [
+            -1.4124862283304207,
+            11.550123103417958
+          ],
+          "comparacion": "no distinguible"
+        },
+        {
+          "frente_a": "Pasco",
+          "dif_pp": 6.034911594237663,
+          "ic95": [
+            -0.6250066275297819,
+            12.694829816005107
+          ],
+          "comparacion": "no distinguible"
+        },
+        {
+          "frente_a": "Huánuco",
+          "dif_pp": 6.044299311918799,
+          "ic95": [
+            -0.8135759621375671,
+            12.902174585975164
+          ],
+          "comparacion": "no distinguible"
+        }
       ]
     },
     "menor_tasa": {
@@ -60,7 +121,7 @@
         7.846911617361673
       ]
     },
-    "por_encima_del_nacional_con_ic95": [
+    "mayor_que_el_nacional": [
       "Ayacucho",
       "Cajamarca",
       "Callao",
@@ -71,7 +132,7 @@
       "Piura",
       "Puno"
     ],
-    "por_debajo_del_nacional_con_ic95": [
+    "menor_que_el_nacional": [
       "Áncash",
       "Arequipa",
       "Cusco",
@@ -82,6 +143,26 @@
       "Moquegua",
       "San Martín"
     ],
+    "no_distinguible_del_nacional": [
+      "Amazonas",
+      "Apurímac",
+      "La Libertad",
+      "Lima",
+      "Tacna",
+      "Tumbes",
+      "Ucayali"
+    ],
+    "lima": {
+      "tasa": 27.06894250548096,
+      "dif_vs_nacional_pp": -0.5105256580881239,
+      "ic95_dif": [
+        -2.242321629219107,
+        1.2212703130428593
+      ],
+      "comparacion": "no distinguible",
+      "pobres_estimados": 3053352,
+      "participacion_en_pobres_pct": 32.10626126100075
+    },
     "mas_pobres_en_numero": [
       {
         "departamento": "Lima",
@@ -126,17 +207,36 @@
       "departamento": "Loreto",
       "brecha_pp": 28.414046451102692
     },
-    "menor": {
-      "departamento": "Tumbes",
-      "brecha_pp": -8.151366941364351
-    },
-    "significativas_95": 16,
-    "con_ambas_areas": 24,
-    "rural_menor_que_urbana": [
-      "Ica",
+    "rural_mayor_significativa": [
+      "Amazonas",
+      "Áncash",
+      "Apurímac",
+      "Arequipa",
+      "Ayacucho",
+      "Cajamarca",
+      "Cusco",
+      "Huánuco",
+      "Junín",
+      "La Libertad",
+      "Lambayeque",
+      "Loreto",
+      "Moquegua",
+      "Piura",
+      "Puno"
+    ],
+    "rural_menor_significativa": [
+      "Ica"
+    ],
+    "no_significativa": [
+      "Huancavelica",
+      "Lima",
+      "Madre de Dios",
       "Pasco",
       "San Martín",
-      "Tumbes"
-    ]
+      "Tacna",
+      "Tumbes",
+      "Ucayali"
+    ],
+    "con_ambas_areas": 24
   }
 }

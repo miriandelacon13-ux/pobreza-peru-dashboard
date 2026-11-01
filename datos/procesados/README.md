@@ -9,7 +9,7 @@ hogar, `factor07 × mieperho`, una fila por hogar. La metodología completa est�
 | `pobreza_nacional_area_2024.csv` | Ámbito: Nacional, Urbana, Rural | 3 |
 | `pobreza_departamento_2024.csv` | Departamento | 25 |
 | `pobreza_departamento_area_2024.csv` | Departamento y área (Callao no tiene área rural en la muestra) | 49 |
-| `brecha_urbano_rural_2024.csv` | Perú (`ccdd = 00`) y cada departamento con ambas áreas | 25 |
+| `brecha_urbano_rural_2024.csv` | Perú (`ccdd = 00`) o departamento con ambas áreas, y tipo de pobreza | 75 |
 | `cifras_clave_2024.json` | Cifras resumidas para los hallazgos y los KPI del dashboard | — |
 | `verificacion.txt` | Resultado de `scripts/verificar_datos.py` | — |
 
@@ -29,15 +29,27 @@ con ese script.
 | `ee_*` | Error estándar de la tasa, en puntos porcentuales (linealización; unidad primaria = conglomerado) |
 | `ic95_inf_*`, `ic95_sup_*` | Intervalo de confianza al 95 % |
 | `cv_*` | Coeficiente de variación de la tasa (%) |
-| `precision_pobreza` | `adecuada` si el CV de la tasa de pobreza es 15 % o menos; si no, `referencial` |
+| `precision_pobreza`, `precision_pobreza_extrema`, `precision_pobreza_no_extrema` | `adecuada` si el CV de esa tasa es 15 % o menos; si no, `referencial` |
+| `dif_nacional_*`, `ic95_inf_dif_nacional_*`, `ic95_sup_dif_nacional_*` | Solo departamentos: tasa del departamento − tasa del país (puntos), con el IC 95 % de la diferencia (incluye la covarianza) |
+| `comparacion_nacional_*` | Solo departamentos: `mayor`, `menor` o `no distinguible` frente al país, según si el IC de la diferencia excluye el 0 |
+| `dif_area_nacional_*`, `ic95_*_dif_area_nacional_*`, `comparacion_area_nacional_*` | Solo departamento × área: lo mismo, frente a la misma área en el país (por ejemplo, Cusco rural frente al Perú rural) |
 | `participacion_en_pobres_pct` | % del total nacional de pobres que está en el grupo |
 | `participacion_en_pobres_del_departamento_pct` | % de los pobres del departamento que está en esa área |
 
+El asterisco `*` es el tipo de pobreza: `pobreza`, `pobreza_extrema` o `pobreza_no_extrema`.
+
+Los números absolutos (`poblacion_estimada` y `pobres_*_estimados`) son **estimaciones propias**: expanden la muestra
+con `factor07 × mieperho`. Suman 1.2 % más que las cifras del INEI, que usan la población proyectada al 2024. Ver la
+limitación 4 en `docs/metodologia.md`.
+
 ## Columnas de `brecha_urbano_rural_2024.csv`
+
+Una fila por ámbito (Perú y cada departamento con ambas áreas) y tipo de pobreza: 25 × 3 = 75 filas.
 
 | Columna | Qué es |
 |---|---|
-| `tasa_urbana`, `tasa_rural` | Tasa de pobreza (%) de cada área |
+| `tipo` | `pobreza`, `pobreza_extrema` o `pobreza_no_extrema` |
+| `tasa_urbana`, `tasa_rural` | Tasa (%) de cada área para ese tipo |
 | `brecha_pp` | Rural − urbana, en puntos porcentuales |
 | `ee_brecha`, `ic95_inf_brecha`, `ic95_sup_brecha` | Error estándar e IC 95 % de la brecha (incluye la covarianza) |
 | `brecha_significativa_95` | `True` si el IC 95 % no incluye el cero |

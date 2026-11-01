@@ -1,11 +1,13 @@
 """Verifica las tablas de pobreza 2024 y escribe datos/procesados/verificacion.txt.
 
 1. Integridad: el zip coincide con el manifiesto; 33,691 hogares; cada conglomerado está en un solo departamento y área.
-2. Cifras externas: la pobreza nacional, extrema, urbana y rural frente a las publicadas por el INEI, y los 25
-   departamentos frente a la referencia del curso.
+2. Cifras externas: la pobreza nacional, extrema, urbana y rural frente a las publicadas por el INEI, los 25
+   departamentos frente a la referencia del curso, y la explicación de las cifras absolutas del INEI.
 3. Coherencia interna: los departamentos y las áreas suman el total nacional; pobreza total = extrema + no extrema;
-   la tasa nacional es el cociente de los totales, no el promedio de las tasas departamentales.
-4. Error de muestreo: compara el error estándar linealizado con un bootstrap de conglomerados.
+   la tasa nacional es el cociente de los totales, no el promedio de las tasas departamentales; las diferencias y
+   brechas cuadran con las tasas.
+4. Error de muestreo: compara el error estándar linealizado (de tasas y de diferencias) con un bootstrap de
+   conglomerados.
 
 Termina con error si alguna comprobación falla.
 
@@ -25,9 +27,11 @@ O = Path("datos/originales")
 # INEI, «Perú: Evolución de la pobreza monetaria 2015-2024», según la cobertura de prensa del 8-9 may. 2025
 # (el informe en gob.pe no permite la descarga automática). Coinciden con el README de la Sesión 16 del curso.
 OFICIAL = {"Nacional": 27.6, "extrema": 5.5, "Urbana": 24.8, "Rural": 39.3}
-POBRES_PUBLICADOS = 9_395_000  # «9 millones 395 mil personas», misma fuente de prensa
+POBRES_DIFUNDIDOS, EXTREMOS_DIFUNDIDOS = 9_395_000, 1_872_000  # «9 millones 395 mil» y «1 millón 872 mil», misma fuente
+POBLACION_PROYECTADA_2024 = 34_038_457  # INEI, «Una mirada al Perú en cifras» Nº 7, julio 2024
 TOLERANCIA_OFICIAL = 0.1  # puntos
 TOLERANCIA_REFERENCIA = 0.05  # la referencia del curso viene redondeada a un decimal
+Z95 = 1.959964
 REPLICAS, SEMILLA = 500, 20241031
 
 
@@ -46,21 +50,25 @@ class Informe:
         self.lineas.append(f"[INFO] {t}")
 
 
-def bootstrap_se(h, dominios, y="pobre"):
-    """Error estándar por bootstrap de conglomerados (con reemplazo, sin estratos) para la tasa de cada dominio."""
-    rng = np.random.default_rng(SEMILLA)
-    psu = h.conglome.astype("category")
-    codigos = psu.cat.codes.to_numpy()
-    n = len(psu.cat.categories)
-    resultados = {}
-    for nombre, dom in dominios.items():
-        w = np.where(dom, h.peso.to_numpy(), 0.0)
-        num = np.bincount(codigos, weights=w * h[y].to_numpy(), minlength=n)
-        den = np.bincount(codigos, weights=w, minlength=n)
-        conteos = rng.multinomial(n, np.full(n, 1 / n), size=REPLICAS)  # cuántas veces sale cada conglomerado
-        tasas = 100 * (conteos @ num) / (conteos @ den)
-        resultados[nombre] = float(np.std(tasas, ddof=1))
-    return resultados
+class Bootstrap:
+    """Réplicas de la muestra que remuestrean conglomerados con reemplazo (sin estratos)."""
+
+    def __init__(self, h):
+        psu = h.conglome.astype("category")
+        self.codigos, n = psu.cat.codes.to_numpy(), len(psu.cat.categories)
+        self.n, self.h = n, h
+        rng = np.random.default_rng(SEMILLA)
+        self.conteos = rng.multinomial(n, np.full(n, 1 / n), size=REPLICAS)  # veces que sale cada conglomerado
+
+    def tasas(self, dominio, y="pobre"):
+        w = np.where(dominio, self.h.peso.to_numpy(), 0.0)
+        num = np.bincount(self.codigos, weights=w * self.h[y].to_numpy(), minlength=self.n)
+        den = np.bincount(self.codigos, weights=w, minlength=self.n)
+        return 100 * (self.conteos @ num) / (self.conteos @ den)
+
+
+def ee_de_ic(inf, sup):
+    return (sup - inf) / (2 * Z95)
 
 
 def main():
@@ -71,6 +79,7 @@ def main():
     nac = pd.read_csv(P / "pobreza_nacional_area_2024.csv").set_index("ambito")
     dep = pd.read_csv(P / "pobreza_departamento_2024.csv", dtype={"ccdd": str})
     da = pd.read_csv(P / "pobreza_departamento_area_2024.csv", dtype={"ccdd": str})
+    br = pd.read_csv(P / "brecha_urbano_rural_2024.csv", dtype={"ccdd": str})
 
     inf.seccion("1. Integridad de los datos")
     manifiesto = json.loads((O / "manifiesto.json").read_text(encoding="utf-8"))
@@ -88,16 +97,20 @@ def main():
         inf.check(abs(t - OFICIAL[ambito]) < TOLERANCIA_OFICIAL and round(t, 1) == OFICIAL[ambito],
                   f"pobreza {ambito.lower()}: {t:.2f} % (INEI, cifra difundida por la prensa: {OFICIAL[ambito]} %)")
     t = nac.loc["Nacional", "tasa_pobreza_extrema"]
-    inf.check(round(t, 1) == OFICIAL["extrema"], f"pobreza extrema nacional: {t:.2f} % (INEI, según la prensa: {OFICIAL["extrema"]} %)")
+    inf.check(round(t, 1) == OFICIAL["extrema"], f"pobreza extrema nacional: {t:.2f} % (INEI, según la prensa: {OFICIAL['extrema']} %)")
     ref = pd.read_csv(O / "referencia_curso_pobreza_departamento_2024.csv", dtype={"ccdd": str}).set_index("ccdd").pobreza_pct
     dif = (dep.set_index("ccdd").tasa_pobreza - ref).abs()
     inf.check(len(dif) == 25 and dif.max() <= TOLERANCIA_REFERENCIA,
               f"25 departamentos frente a la referencia del curso: diferencia máxima {dif.max():.3f} puntos ({dif.idxmax()})")
-    pobres = int(nac.loc["Nacional", "pobres_estimados"])
-    inf.info(f"pobres estimados: {pobres:,}; el INEI difundió {POBRES_PUBLICADOS:,} (prensa) (diferencia {pobres - POBRES_PUBLICADOS:+,}, "
-             f"{100 * (pobres / POBRES_PUBLICADOS - 1):+.1f} %). Las tasas coinciden, pero la población total que expande la "
-             f"sumaria ({int(nac.loc['Nacional', 'poblacion_estimada']):,}) no es la que usa el INEI para las cifras absolutas: "
-             "usar los números absolutos como aproximación")
+    inei_pobres = round(OFICIAL["Nacional"] / 100 * POBLACION_PROYECTADA_2024, -3)
+    inei_extremos = round(OFICIAL["extrema"] / 100 * POBLACION_PROYECTADA_2024, -3)
+    inf.check(inei_pobres == POBRES_DIFUNDIDOS and inei_extremos == EXTREMOS_DIFUNDIDOS,
+              f"cifras absolutas del INEI = tasa publicada × población proyectada 2024 ({POBLACION_PROYECTADA_2024:,}): "
+              f"{OFICIAL['Nacional']} % → {inei_pobres:,.0f} y {OFICIAL['extrema']} % → {inei_extremos:,.0f}, iguales a las difundidas")
+    pobres, poblacion = int(nac.loc["Nacional", "pobres_estimados"]), int(nac.loc["Nacional", "poblacion_estimada"])
+    inf.info(f"estimación propia: {pobres:,} pobres sobre {poblacion:,} personas que expande la sumaria (factor07 × mieperho); "
+             f"{pobres - POBRES_DIFUNDIDOS:+,} ({100 * (pobres / POBRES_DIFUNDIDOS - 1):+.1f} %) frente a la cifra del INEI, porque "
+             f"la población de la expansión es {poblacion - POBLACION_PROYECTADA_2024:+,} mayor que la proyectada")
 
     inf.seccion("3. Coherencia interna")
     for col in ["poblacion_estimada", "pobres_estimados", "pobres_extremos_estimados"]:
@@ -119,17 +132,46 @@ def main():
              f"{nac.loc['Nacional', 'tasa_pobreza']:.2f} %: promediar porcentajes ignora el tamaño de cada departamento")
     inf.check(len(da) == 49 and not ((da.ccdd == "07") & (da.area == "Rural")).any(),
               "departamento × área: 49 celdas (Callao no tiene hogares rurales en la muestra)")
+    for tipo in ["pobreza", "pobreza_extrema", "pobreza_no_extrema"]:
+        d = dep[f"tasa_{tipo}"] - nac.loc["Nacional", f"tasa_{tipo}"]
+        cls = np.where(dep[f"ic95_inf_dif_nacional_{tipo}"] > 0, "mayor",
+                       np.where(dep[f"ic95_sup_dif_nacional_{tipo}"] < 0, "menor", "no distinguible"))
+        inf.check(((d - dep[f"dif_nacional_{tipo}"]).abs() < 0.002).all() and (cls == dep[f"comparacion_nacional_{tipo}"]).all(),
+                  f"{tipo}: diferencia departamento − país = resta de tasas y clasificación coherente con su IC 95 %")
+        b = br[br.tipo == tipo].set_index("ccdd")
+        u = da[da.area == "Urbana"].set_index("ccdd")[f"tasa_{tipo}"]
+        r = da[da.area == "Rural"].set_index("ccdd")[f"tasa_{tipo}"]
+        bd = b.drop(index="00")
+        inf.check(len(b) == 25 and ((bd.brecha_pp - (r - u).reindex(bd.index)).abs() < 0.002).all()
+                  and abs(b.loc["00", "brecha_pp"] - (nac.loc["Rural", f"tasa_{tipo}"] - nac.loc["Urbana", f"tasa_{tipo}"])) < 0.002,
+                  f"{tipo}: brecha = tasa rural − tasa urbana en el país y en los 24 departamentos con ambas áreas")
+    lima = dep.set_index("departamento").loc["Lima"]
+    inf.info(f"Lima: {lima.tasa_pobreza:.2f} % frente a {nac.loc['Nacional', 'tasa_pobreza']:.2f} % nacional; diferencia "
+             f"{lima.dif_nacional_pobreza:+.2f} puntos (IC 95 % {lima.ic95_inf_dif_nacional_pobreza:+.2f} a "
+             f"{lima.ic95_sup_dif_nacional_pobreza:+.2f}): {lima.comparacion_nacional_pobreza}")
 
-    inf.seccion("4. Error de muestreo: linealización frente a bootstrap de conglomerados")
-    dominios = {"Nacional": pd.Series(True, index=h.index), "Urbana": h.area == "Urbana", "Rural": h.area == "Rural",
-                "Lima": h.departamento == "15", "Cajamarca": h.departamento == "06", "Ica": h.departamento == "11"}
-    boot = bootstrap_se(h, dominios)
-    for nombre, se_b in boot.items():
-        se_l = nac.loc[nombre, "ee_pobreza"] if nombre in nac.index else dep.set_index("departamento").loc[nombre, "ee_pobreza"]
-        razon = se_b / se_l
-        inf.check(0.8 <= razon <= 1.25, f"{nombre}: EE linealizado {se_l:.3f}, bootstrap ({REPLICAS} réplicas) {se_b:.3f}, razón {razon:.2f}")
+    inf.seccion(f"4. Error de muestreo: linealización frente a bootstrap de conglomerados ({REPLICAS} réplicas)")
+    bs = Bootstrap(h)
+    pais = np.ones(len(h), dtype=bool)
+    dom = {"Nacional": pais, "Urbana": (h.area == "Urbana").to_numpy(), "Rural": (h.area == "Rural").to_numpy(),
+           "Lima": (h.departamento == "15").to_numpy(), "Cajamarca": (h.departamento == "06").to_numpy(),
+           "Ica": (h.departamento == "11").to_numpy()}
+    rep = {k: bs.tasas(v) for k, v in dom.items()}
+    dep_i = dep.set_index("departamento")
+    for nombre, tasas in rep.items():
+        se_l = nac.loc[nombre, "ee_pobreza"] if nombre in nac.index else dep_i.loc[nombre, "ee_pobreza"]
+        razon = np.std(tasas, ddof=1) / se_l
+        inf.check(0.8 <= razon <= 1.25, f"tasa {nombre}: EE linealizado {se_l:.3f}, bootstrap {np.std(tasas, ddof=1):.3f}, razón {razon:.2f}")
+    for nombre in ["Lima", "Cajamarca"]:
+        se_l = ee_de_ic(dep_i.loc[nombre, "ic95_inf_dif_nacional_pobreza"], dep_i.loc[nombre, "ic95_sup_dif_nacional_pobreza"])
+        se_b = np.std(rep[nombre] - rep["Nacional"], ddof=1)
+        inf.check(0.8 <= se_b / se_l <= 1.25, f"diferencia {nombre} − país: EE linealizado {se_l:.3f}, bootstrap {se_b:.3f}, razón {se_b / se_l:.2f}")
+    b0 = br[(br.ccdd == "00") & (br.tipo == "pobreza")].iloc[0]
+    se_b = np.std(rep["Rural"] - rep["Urbana"], ddof=1)
+    inf.check(0.8 <= se_b / b0.ee_brecha <= 1.25,
+              f"brecha rural − urbana del país: EE linealizado {b0.ee_brecha:.3f}, bootstrap {se_b:.3f}, razón {se_b / b0.ee_brecha:.2f}")
     refer = dep[dep.precision_pobreza == "referencial"].departamento.tolist()
-    inf.info(f"departamentos con CV > 15 % (estimación referencial): {', '.join(refer) or 'ninguno'}")
+    inf.info(f"departamentos con CV > 15 % en la pobreza total (estimación referencial): {', '.join(refer) or 'ninguno'}")
 
     resultado = "OK" if inf.fallas == 0 else f"FALLA ({inf.fallas} comprobaciones)"
     texto = "\n".join(["# Verificación de las tablas de pobreza 2024", "Fuente: INEI, ENAHO 2024, módulo 34 (Sumaria). "

@@ -82,26 +82,55 @@ departamentales daría 26.50 % en vez de 27.58 %, porque ignora que Lima tiene 1
 Cuando el CV es mayor que 15 %, la estimación se marca como **referencial**. Es un criterio de precisión de este
 proyecto.
 
-La brecha rural − urbana se calcula con su propio error estándar, que incluye la covarianza. Los dominios se estiman
-sobre la muestra completa, con ceros fuera del dominio. Cada conglomerado pertenece a un solo departamento y a una sola
-área.
+Los dominios se estiman sobre la muestra completa, con ceros fuera del dominio. Cada conglomerado pertenece a un solo
+departamento y a una sola área.
 
-**4. Verificar** (`scripts/verificar_datos.py` → `datos/procesados/verificacion.txt`). Son 32 comprobaciones; todas
+### Comparaciones y significancia
+
+Cuando el proyecto dice que una tasa es «mayor», «menor» o que una brecha es «clara», se refiere a una prueba sobre la
+**diferencia** de dos tasas, no a si sus intervalos se superponen.
+
+1. **La diferencia.** `D = tasa(A) − tasa(B)`.
+2. **Su error estándar.** Se calcula por linealización. La contribución de cada conglomerado es la de A menos la de B,
+   así que el error **incluye la covarianza** entre las dos tasas. Eso importa porque un departamento es parte del
+   total nacional, y el área urbana y la rural son partes del mismo país.
+3. **El intervalo.** IC 95 % = `D ± 1.96 × error estándar`.
+4. **La clasificación:**
+   - **Mayor** si el intervalo está entero por encima de 0.
+   - **Menor** si está entero por debajo de 0.
+   - **No distinguible** si incluye el 0.
+
+Comparaciones calculadas (`scripts/analizar_datos.py`):
+
+| Comparación | Columnas o archivo |
+|---|---|
+| Cada departamento frente al país, para los tres tipos de pobreza | `dif_nacional_*`, `ic95_*_dif_nacional_*` y `comparacion_nacional_*` en `pobreza_departamento_2024.csv` |
+| Cada celda departamento × área frente a la misma área en el país | `*_area_nacional_*` en `pobreza_departamento_area_2024.csv` |
+| Brecha rural − urbana del país y de los 24 departamentos con ambas áreas, por tipo de pobreza | `brecha_urbano_rural_2024.csv` |
+| El departamento con la tasa más alta frente a los cuatro siguientes | `cifras_clave_2024.json` |
+
+Es una prueba por comparación, con un nivel de 95 % en cada una. Al revisar 25 departamentos a la vez, se pueden
+esperar uno o dos falsos positivos por azar. Las diferencias pequeñas que apenas excluyen el cero deben leerse con
+cuidado.
+
+**4. Verificar** (`scripts/verificar_datos.py` → `datos/procesados/verificacion.txt`). Son 42 comprobaciones; todas
 dan OK:
 
 - La pobreza nacional (27.58 %), extrema (5.50 %), urbana (24.81 %) y rural (39.30 %) coinciden con las cifras del
   INEI al decimal publicado.
 - Los 25 departamentos quedan a 0.049 puntos o menos de la referencia del curso.
+- Las cifras absolutas del INEI son iguales a su tasa publicada por la población proyectada al 2024 (ver limitación 4).
 - Los departamentos, las áreas y las celdas departamento × área suman los totales.
 - Pobreza total = extrema + no extrema.
-- El error estándar linealizado coincide con un bootstrap de 500 réplicas de conglomerados (razón entre 0.96 y 1.02
-  en seis dominios).
+- Las diferencias y las brechas cuadran con las tasas, y su clasificación con su IC.
+- Los errores estándar linealizados coinciden con un bootstrap de 500 réplicas de conglomerados (razón entre 0.95 y
+  1.04). Se comparan seis tasas, dos diferencias departamento − país y la brecha nacional.
 
 ## Limitaciones
 
 1. **Es una muestra.** Las cifras departamentales tienen error de muestreo; por ejemplo, Cajamarca es 45.0 % con un
-   IC 95 % de 40.5 a 49.5. Diferencias de pocos puntos entre departamentos pueden no ser significativas, y por eso el
-   INEI publica los departamentos en grupos.
+   IC 95 % de 40.5 a 49.5. Diferencias de pocos puntos entre departamentos pueden no ser significativas: Cajamarca no
+   se distingue de Loreto, Puno, Pasco ni Huánuco. Por eso el INEI publica los departamentos en grupos.
    - Departamentos referenciales (CV > 15 %): Ica, Madre de Dios y Moquegua.
    - Celdas departamento × área referenciales: 13 de 49. La de Ica rural (2.6 %) tiene un CV de 60 %.
 2. **Callao no tiene hogares rurales en la muestra**, así que no hay brecha urbano-rural para Callao.
@@ -109,9 +138,18 @@ dan OK:
    En la ENAHO, el dominio «Lima Metropolitana» (`dominio = 8`) incluye Callao: los 1,027 hogares de Callao de la
    muestra están en ese dominio. Por eso las cifras de Lima Metropolitana no son comparables con las del departamento
    de Lima.
-4. **Las cifras absolutas son aproximadas.** Las tasas coinciden con las del INEI, pero la población que expande la
-   sumaria (34.48 millones) da 9.51 millones de pobres. El INEI difundió 9.395 millones (+1.2 %). No se pudo verificar
-   qué población usa el INEI para sus cifras absolutas.
+4. **Las cifras absolutas son estimaciones propias.** Personas pobres y población salen de expandir la muestra con
+   `factor07 × mieperho`, que suma 34,482,699 personas. Así se obtienen 9,510,145 pobres y 1,898,111 pobres extremos.
+   - **El INEI difundió 9 395 000 y 1 872 000.** Esas cifras son iguales a su tasa publicada (27.6 % y 5.5 %) por la
+     población total proyectada al 2024: 34,038,457 personas, según
+     [*Una mirada al Perú en cifras* Nº 7, julio 2024](https://cdn.www.gob.pe/uploads/document/file/6726276/5836665-una-mirada-al-peru-en-cifras.pdf).
+     La comprobación está en `verificar_datos.py`.
+   - **La diferencia (+1.2 %) no viene de las tasas, que coinciden.** Viene de la población total: la de la expansión
+     es 444,242 personas mayor que la proyectada.
+   - **Por eso los números absolutos se presentan como estimaciones propias y aproximadas.** Las tasas no dependen
+     de esa población total. Las participaciones (por ejemplo, el 32.1 % de los pobres que vive en Lima) son cocientes
+     dentro de la misma expansión: no cambiarían si toda la expansión se ajustara proporcionalmente al total
+     proyectado.
 5. **Población cubierta.** Miembros de hogares particulares, sin trabajadores del hogar ni pensionistas y sin
    viviendas colectivas. Es la población de la pobreza monetaria del INEI.
 6. **Área urbana y rural.** Se definen por el estrato del conglomerado (2,000 habitantes), no por límites

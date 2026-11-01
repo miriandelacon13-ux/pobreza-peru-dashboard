@@ -14,3 +14,4 @@ tzdata==2026.6
     # via
     #   pandas
     #   python-dateutil
+websocket-client==1.9.2

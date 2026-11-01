@@ -1,26 +1,76 @@
-ccdd,departamento,tasa_urbana,tasa_rural,brecha_pp,ee_brecha,ic95_inf_brecha,ic95_sup_brecha,brecha_significativa_95,razon_rural_urbana
-00,Perú,24.807,39.303,14.496,1.051,12.437,16.555,True,1.584
-01,Amazonas,21.871,31.057,9.185,4.665,0.043,18.328,True,1.42
-02,Áncash,15.063,38.059,22.996,3.755,15.635,30.357,True,2.527
-03,Apurímac,18.319,29.256,10.936,4.686,1.752,20.121,True,1.597
-04,Arequipa,14.427,33.647,19.22,4.638,10.13,28.31,True,2.332
-05,Ayacucho,26.547,42.796,16.249,4.352,7.718,24.779,True,1.612
-06,Cajamarca,31.202,55.092,23.89,4.336,15.391,32.39,True,1.766
-08,Cusco,14.86,24.696,9.835,3.822,2.345,17.326,True,1.662
-09,Huancavelica,30.622,34.514,3.892,5.441,-6.772,14.556,False,1.127
-10,Huánuco,29.375,46.016,16.641,5.14,6.568,26.715,True,1.567
-11,Ica,6.181,2.557,-3.625,1.824,-7.199,-0.05,True,0.414
-12,Junín,15.501,25.337,9.836,4.035,1.928,17.744,True,1.635
-13,La Libertad,26.092,49.898,23.806,4.766,14.465,33.147,True,1.912
-14,Lambayeque,12.727,21.492,8.765,4.233,0.468,17.063,True,1.689
-15,Lima,27.026,30.104,3.077,4.364,-5.476,11.63,False,1.114
-16,Loreto,34.962,63.376,28.414,4.255,20.075,36.753,True,1.813
-17,Madre de Dios,10.339,16.525,6.186,6.017,-5.608,17.98,False,1.598
-18,Moquegua,7.288,28.215,20.928,4.499,12.11,29.745,True,3.872
-19,Pasco,39.27,38.236,-1.034,5.049,-10.929,8.862,False,0.974
-20,Piura,29.67,41.515,11.845,4.086,3.837,19.853,True,1.399
-21,Puno,36.905,45.454,8.55,4.214,0.29,16.809,True,1.232
-22,San Martín,22.32,21.261,-1.059,3.581,-8.077,5.959,False,0.953
-23,Tacna,23.452,27.864,4.412,5.236,-5.849,14.673,False,1.188
-24,Tumbes,27.051,18.899,-8.151,4.429,-16.833,0.53,False,0.699
-25,Ucayali,26.355,31.022,4.668,4.971,-5.076,14.411,False,1.177
+ccdd,departamento,tipo,tasa_urbana,tasa_rural,brecha_pp,ee_brecha,ic95_inf_brecha,ic95_sup_brecha,brecha_significativa_95,razon_rural_urbana
+00,Perú,pobreza,24.807,39.303,14.496,1.051,12.437,16.555,True,1.584
+00,Perú,pobreza_extrema,3.136,15.518,12.382,0.704,11.002,13.762,True,4.948
+00,Perú,pobreza_no_extrema,21.671,23.784,2.114,0.807,0.532,3.695,True,1.098
+01,Amazonas,pobreza,21.871,31.057,9.185,4.665,0.043,18.328,True,1.42
+01,Amazonas,pobreza_extrema,3.856,8.964,5.108,2.484,0.239,9.977,True,2.325
+01,Amazonas,pobreza_no_extrema,18.016,22.093,4.078,3.642,-3.06,11.215,False,1.226
+02,Áncash,pobreza,15.063,38.059,22.996,3.755,15.635,30.357,True,2.527
+02,Áncash,pobreza_extrema,0.717,15.874,15.157,2.211,10.824,19.491,True,22.148
+02,Áncash,pobreza_no_extrema,14.346,22.184,7.839,3.084,1.793,13.884,True,1.546
+03,Apurímac,pobreza,18.319,29.256,10.936,4.686,1.752,20.121,True,1.597
+03,Apurímac,pobreza_extrema,3.27,7.085,3.816,2.415,-0.917,8.549,False,2.167
+03,Apurímac,pobreza_no_extrema,15.05,22.17,7.12,4.22,-1.15,15.391,False,1.473
+04,Arequipa,pobreza,14.427,33.647,19.22,4.638,10.13,28.31,True,2.332
+04,Arequipa,pobreza_extrema,0.977,10.45,9.473,2.652,4.276,14.671,True,10.696
+04,Arequipa,pobreza_no_extrema,13.45,23.197,9.747,3.978,1.951,17.543,True,1.725
+05,Ayacucho,pobreza,26.547,42.796,16.249,4.352,7.718,24.779,True,1.612
+05,Ayacucho,pobreza_extrema,6.542,13.192,6.65,2.597,1.559,11.741,True,2.016
+05,Ayacucho,pobreza_no_extrema,20.005,29.604,9.599,3.259,3.211,15.986,True,1.48
+06,Cajamarca,pobreza,31.202,55.092,23.89,4.336,15.391,32.39,True,1.766
+06,Cajamarca,pobreza_extrema,6.3,29.516,23.216,3.233,16.88,29.553,True,4.685
+06,Cajamarca,pobreza_no_extrema,24.902,25.576,0.674,3.519,-6.223,7.571,False,1.027
+08,Cusco,pobreza,14.86,24.696,9.835,3.822,2.345,17.326,True,1.662
+08,Cusco,pobreza_extrema,0.97,4.0,3.03,1.288,0.505,5.555,True,4.123
+08,Cusco,pobreza_no_extrema,13.89,20.696,6.805,3.506,-0.066,13.677,False,1.49
+09,Huancavelica,pobreza,30.622,34.514,3.892,5.441,-6.772,14.556,False,1.127
+09,Huancavelica,pobreza_extrema,6.256,13.118,6.863,3.439,0.122,13.603,True,2.097
+09,Huancavelica,pobreza_no_extrema,24.366,21.396,-2.97,3.848,-10.511,4.571,False,0.878
+10,Huánuco,pobreza,29.375,46.016,16.641,5.14,6.568,26.715,True,1.567
+10,Huánuco,pobreza_extrema,4.778,17.658,12.88,3.307,6.399,19.361,True,3.696
+10,Huánuco,pobreza_no_extrema,24.597,28.358,3.761,4.321,-4.708,12.23,False,1.153
+11,Ica,pobreza,6.181,2.557,-3.625,1.824,-7.199,-0.05,True,0.414
+11,Ica,pobreza_extrema,0.155,0.0,-0.155,0.155,-0.458,0.148,False,0.0
+11,Ica,pobreza_no_extrema,6.026,2.557,-3.47,1.821,-7.038,0.099,False,0.424
+12,Junín,pobreza,15.501,25.337,9.836,4.035,1.928,17.744,True,1.635
+12,Junín,pobreza_extrema,2.353,7.173,4.82,1.987,0.926,8.714,True,3.048
+12,Junín,pobreza_no_extrema,13.147,18.164,5.016,3.206,-1.267,11.3,False,1.382
+13,La Libertad,pobreza,26.092,49.898,23.806,4.766,14.465,33.147,True,1.912
+13,La Libertad,pobreza_extrema,2.684,25.222,22.539,3.688,15.31,29.767,True,9.399
+13,La Libertad,pobreza_no_extrema,23.408,24.675,1.267,3.334,-5.268,7.802,False,1.054
+14,Lambayeque,pobreza,12.727,21.492,8.765,4.233,0.468,17.063,True,1.689
+14,Lambayeque,pobreza_extrema,0.092,2.819,2.727,1.125,0.522,4.932,True,30.522
+14,Lambayeque,pobreza_no_extrema,12.635,18.673,6.038,4.072,-1.943,14.019,False,1.478
+15,Lima,pobreza,27.026,30.104,3.077,4.364,-5.476,11.63,False,1.114
+15,Lima,pobreza_extrema,2.997,11.744,8.747,2.777,3.305,14.189,True,3.918
+15,Lima,pobreza_no_extrema,24.029,18.36,-5.67,2.979,-11.508,0.169,False,0.764
+16,Loreto,pobreza,34.962,63.376,28.414,4.255,20.075,36.753,True,1.813
+16,Loreto,pobreza_extrema,10.133,27.336,17.202,3.86,9.636,24.769,True,2.698
+16,Loreto,pobreza_no_extrema,24.829,36.04,11.212,3.293,4.758,17.666,True,1.452
+17,Madre de Dios,pobreza,10.339,16.525,6.186,6.017,-5.608,17.98,False,1.598
+17,Madre de Dios,pobreza_extrema,1.173,3.915,2.741,1.922,-1.027,6.509,False,3.336
+17,Madre de Dios,pobreza_no_extrema,9.166,12.611,3.444,4.88,-6.121,13.01,False,1.376
+18,Moquegua,pobreza,7.288,28.215,20.928,4.499,12.11,29.745,True,3.872
+18,Moquegua,pobreza_extrema,0.406,11.64,11.235,2.744,5.856,16.613,True,28.698
+18,Moquegua,pobreza_no_extrema,6.882,16.575,9.693,3.264,3.296,16.09,True,2.408
+19,Pasco,pobreza,39.27,38.236,-1.034,5.049,-10.929,8.862,False,0.974
+19,Pasco,pobreza_extrema,6.724,12.302,5.579,3.397,-1.079,12.236,False,1.83
+19,Pasco,pobreza_no_extrema,32.546,25.934,-6.612,4.361,-15.16,1.935,False,0.797
+20,Piura,pobreza,29.67,41.515,11.845,4.086,3.837,19.853,True,1.399
+20,Piura,pobreza_extrema,1.827,15.767,13.94,3.114,7.836,20.044,True,8.631
+20,Piura,pobreza_no_extrema,27.844,25.748,-2.096,3.202,-8.37,4.179,False,0.925
+21,Puno,pobreza,36.905,45.454,8.55,4.214,0.29,16.809,True,1.232
+21,Puno,pobreza_extrema,8.272,20.175,11.903,2.817,6.383,17.424,True,2.439
+21,Puno,pobreza_no_extrema,28.633,25.28,-3.353,3.361,-9.941,3.234,False,0.883
+22,San Martín,pobreza,22.32,21.261,-1.059,3.581,-8.077,5.959,False,0.953
+22,San Martín,pobreza_extrema,4.374,4.432,0.058,1.798,-3.465,3.582,False,1.013
+22,San Martín,pobreza_no_extrema,17.946,16.829,-1.117,2.887,-6.776,4.541,False,0.938
+23,Tacna,pobreza,23.452,27.864,4.412,5.236,-5.849,14.673,False,1.188
+23,Tacna,pobreza_extrema,1.607,10.178,8.571,2.873,2.94,14.202,True,6.334
+23,Tacna,pobreza_no_extrema,21.845,17.685,-4.159,4.164,-12.32,4.001,False,0.81
+24,Tumbes,pobreza,27.051,18.899,-8.151,4.429,-16.833,0.53,False,0.699
+24,Tumbes,pobreza_extrema,1.064,1.047,-0.017,1.148,-2.268,2.233,False,0.984
+24,Tumbes,pobreza_no_extrema,25.986,17.852,-8.134,4.31,-16.581,0.313,False,0.687
+25,Ucayali,pobreza,26.355,31.022,4.668,4.971,-5.076,14.411,False,1.177
+25,Ucayali,pobreza_extrema,2.743,6.144,3.401,2.342,-1.189,7.992,False,2.24
+25,Ucayali,pobreza_no_extrema,23.612,24.878,1.266,4.51,-7.573,10.105,False,1.054
