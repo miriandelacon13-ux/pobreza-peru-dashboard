@@ -4,3 +4,6 @@ datos/originales/*.zip
 datos/procesados/*.parquet
 .venv/
 __pycache__/
+# Grabación de la voz propia (dato personal) y salidas intermedias de la voz clonada
+reel/recursos/mi_voz.*
+reel/salidas*/
